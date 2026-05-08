@@ -44,7 +44,7 @@ export default function App() {
   const [content, setContent] = useState(INITIAL_CONTENT);
   const [bgImage, setBgImage] = useState(PRESETS[0].url);
   const [bgVideo, setBgVideo] = useState(INITIAL_CONTENT.bgVideo);
-  const [particleCount, setParticleCount] = useState(105);
+  const [particleCount, setParticleCount] = useState(20);
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
