@@ -48,6 +48,15 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const meowAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const playMeow = () => {
+    if (!meowAudioRef.current) {
+      meowAudioRef.current = new Audio('https://ik.imagekit.io/x8axvbbz3/yomecerlm3-meow-460686.mp3');
+    }
+    meowAudioRef.current.currentTime = 0;
+    meowAudioRef.current.play().catch(e => console.error("Audio play failed:", e));
+  };
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
@@ -143,6 +152,7 @@ export default function App() {
             transition: { duration: 0.3 }
           }}
           whileTap={{ scale: 0.95 }}
+          onClick={playMeow}
           className="flex items-center gap-4 group cursor-pointer pointer-events-auto transition-all"
         >
           <img 
