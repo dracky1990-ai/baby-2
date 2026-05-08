@@ -6,6 +6,8 @@ import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight,
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
   label: "La Musa Escénica",
+  nav1: "Esencia",
+  nav2: "Universo",
   heroTitle: "Invocando \nEmociones",
   heroDesc: "Barbara Higuera no escribe canciones, las convierte en escenas. Letras con identidad, alma y estética diseñadas para ser recordadas.",
   heroBtn: "Descubrir el Universo",
@@ -43,6 +45,23 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [loginError, setLoginError] = useState(false);
+
+  const handleLogin = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (passwordInput === "1234") {
+      setShowSettings(true);
+      setShowPasswordModal(false);
+      setPasswordInput("");
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 2000);
+    }
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -57,22 +76,26 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden">
+    <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden drop-shadow-[0_2px_15px_rgba(0,0,0,0.5)]">
       <BackgroundCanvas bgImage={bgImage} particleCount={particleCount} />
       
       {/* Navigation */}
-      <nav className="absolute top-0 w-full p-6 md:p-8 lg:p-16 flex justify-between items-center z-50 pointer-events-none">
+      <nav className="fixed md:absolute top-0 w-full p-4 md:p-8 lg:p-16 flex justify-between items-center z-50 pointer-events-none bg-black/20 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          whileHover={{ scale: 1.05, filter: "brightness(1.5) drop-shadow(0 0 30px rgba(255,78,0,0.8))" }}
-          whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-4 group cursor-pointer pointer-events-auto transition-all duration-500"
+          whileHover={{ 
+            scale: 1.1, 
+            filter: "brightness(1.8) drop-shadow(0 0 60px rgba(255,78,0,1))",
+            transition: { duration: 0.6, ease: "easeOut" }
+          }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-4 group cursor-pointer pointer-events-auto transition-all duration-700"
         >
           <img 
             src={content.logo} 
             alt="Logo" 
-            className="w-32 h-32 md:w-56 md:h-56 lg:w-[480px] lg:h-[480px] object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,1)] brightness-150 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="w-24 h-24 sm:w-32 sm:h-32 md:w-64 md:h-64 lg:w-[580px] lg:h-[580px] object-contain filter drop-shadow-[0_0_100px_rgba(255,78,0,0.8)] brightness-150 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -81,39 +104,47 @@ export default function App() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex items-center gap-4 md:gap-8 text-[9px] md:text-[11px] tracking-[0.2em] uppercase text-white/90 pointer-events-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
+          className="flex items-center gap-4 md:gap-8 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white/90 pointer-events-auto"
         >
           <motion.a 
             href="#" 
-            whileHover={{ scale: 1.15, textShadow: "0 0 25px rgba(255,255,255,1)", color: "#fff" }}
+            whileHover={{ 
+              scale: 1.15, 
+              textShadow: "0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,78,0,0.5)", 
+              color: "#fff" 
+            }}
             whileTap={{ scale: 0.9 }}
-            className="hidden sm:block text-white font-bold hover:text-white transition-all cursor-pointer drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
+            className="text-white font-black hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
           >
-            Esencia
+            {content.nav1}
           </motion.a>
           <motion.a 
             href="#" 
-            whileHover={{ scale: 1.15, textShadow: "0 0 25px rgba(255,255,255,1)", color: "#fff" }}
+            whileHover={{ 
+              scale: 1.15, 
+              textShadow: "0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,78,0,0.5)", 
+              color: "#fff" 
+            }}
             whileTap={{ scale: 0.9 }}
-            className="hidden sm:block text-white font-bold hover:text-white transition-all cursor-pointer drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
+            className="text-white font-black hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
           >
-            Universo
+            {content.nav2}
           </motion.a>
         </motion.div>
       </nav>
 
       {/* Landing Page Content */}
-      <div className="relative z-10 w-full">
+      <div className="relative z-10 w-full overflow-hidden">
         {/* Section 1: Hero */}
-        <section className="min-h-[80vh] flex flex-col pt-32 md:pt-80 lg:pt-96 pb-20 md:pb-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+        <section className="min-h-screen flex flex-col justify-center pt-32 sm:pt-40 md:pt-48 lg:pt-64 pb-12 sm:pb-20 md:pb-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-[10px] md:text-xs tracking-[0.5em] md:tracking-[0.6em] uppercase font-bold text-brand mb-4 md:mb-8 flex items-center gap-3 md:gap-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+            className="text-[10px] md:text-sm tracking-[0.5em] md:tracking-[0.6em] uppercase font-bold text-brand mb-4 md:mb-8 flex items-center gap-3 md:gap-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
           >
-            <div className="w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
+            <div className="w-8 sm:w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
             {content.label}
           </motion.div>
 
@@ -122,14 +153,14 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-4xl xs:text-5xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-[-1px] md:tracking-[-4px] leading-[1.1] md:leading-[0.8] mb-10 md:mb-16 drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] whitespace-pre-line"
+            className="text-4xl xs:text-5xl sm:text-6xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-[-1px] md:tracking-[-4px] leading-[1.0] sm:leading-[1.1] md:leading-[0.8] mb-8 md:mb-16 drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] whitespace-pre-line overflow-wrap-anywhere"
           >
             {content.heroTitle.split('\n').map((line, i) => (
               <React.Fragment key={i}>
                 {line.includes('Emociones') ? (
-                  <span className="italic text-glow drop-shadow-[0_0_30px_rgba(255,78,0,0.6)]">{line}</span>
+                  <span className="italic text-glow drop-shadow-[0_0_30px_rgba(255,78,0,0.6)] block sm:inline">{line}</span>
                 ) : line}
-                {i === 0 && <br />}
+                {i === 0 && <br className="hidden sm:block" />}
               </React.Fragment>
             ))}
           </motion.h1>
@@ -139,7 +170,7 @@ export default function App() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-white max-w-[520px] leading-relaxed mb-10 md:mb-12 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
+            className="text-base sm:text-lg md:text-xl text-white max-w-[520px] leading-relaxed mb-10 md:mb-12 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
           >
             {content.heroDesc}
           </motion.p>
@@ -151,11 +182,17 @@ export default function App() {
             transition={{ delay: 0.5 }}
           >
             <motion.button 
-              whileHover={{ scale: 1.1, x: 10, filter: "brightness(1.2)", textShadow: "0 0 10px rgba(255,100,0,0.5)" }}
+              whileHover={{ 
+                scale: 1.12, 
+                x: 10, 
+                filter: "brightness(1.3)", 
+                textShadow: "0 0 20px rgba(255,100,0,0.8)",
+                boxShadow: "0 10px 40px rgba(255,78,0,0.3)"
+              }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-4 text-[10px] md:text-sm tracking-[0.3em] uppercase font-black group drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
+              className="flex items-center gap-4 text-[10px] md:text-sm tracking-[0.3em] uppercase font-black group drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] px-2"
             >
-              <span className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white/80 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/30 bg-black/50 backdrop-blur-md group-hover:shadow-[0_0_40px_rgba(255,78,0,0.7)]">
+              <span className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white/80 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/30 bg-black/50 backdrop-blur-md group-hover:shadow-[0_0_50px_rgba(255,78,0,0.8)]">
                 <ArrowRight className="w-4 h-4 md:w-6 md:h-6 transition-transform group-hover:translate-x-2" />
               </span>
               <span className="group-hover:text-brand group-hover:drop-shadow-[0_0_20px_rgba(255,78,0,0.8)] transition-all">{content.heroBtn}</span>
@@ -231,12 +268,12 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto rounded-[32px] md:rounded-[40px] p-10 md:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group"
+            className="max-w-3xl mx-auto rounded-[32px] md:rounded-[40px] p-8 sm:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group"
           >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             
-            <h2 className="text-3xl md:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line">{content.ctaTitle}</h2>
-            <p className="text-white/60 md:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base">
+            <h2 className="text-3xl sm:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-tight">{content.ctaTitle}</h2>
+            <p className="text-white/70 sm:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base leading-relaxed px-4">
               {content.ctaDesc}
             </p>
             
@@ -249,7 +286,7 @@ export default function App() {
                 filter: "brightness(1.1)"
               }}
               whileTap={{ scale: 0.92 }}
-              className="px-12 py-6 md:px-20 md:py-8 bg-brand text-white font-black rounded-full transition-all shadow-2xl shadow-brand/60 relative z-10 text-[10px] md:text-sm tracking-widest uppercase border-2 border-white/30"
+              className="px-8 py-5 sm:px-20 sm:py-8 bg-brand text-white font-black rounded-full transition-all shadow-2xl shadow-brand/60 relative z-10 text-[10px] md:text-sm tracking-widest uppercase border-2 border-white/30"
             >
               {content.ctaBtn}
             </motion.button>
@@ -269,12 +306,10 @@ export default function App() {
                 </motion.div>
                 <span className="text-[11px] tracking-[0.3em] uppercase font-black text-white/50 border-l border-white/20 pl-8">Barbara Higuera Lab</span>
                 <motion.button
-                  whileHover={{ scale: 1.2, color: "#ff4e00" }}
-                  onClick={() => {
-                    const pass = prompt("Acceso Restringido - Ingrese Contraseña:");
-                    if(pass === "1234") setShowSettings(true);
-                  }}
-                  className="opacity-20 hover:opacity-100 transition-all pointer-events-auto"
+                  whileHover={{ scale: 1.3, color: "#ff4e00" }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setShowPasswordModal(true)}
+                  className="opacity-40 hover:opacity-100 transition-all pointer-events-auto p-2 ml-4 bg-white/5 rounded-full border border-white/10"
                 >
                   <Lock className="w-4 h-4" />
                 </motion.button>
@@ -288,6 +323,56 @@ export default function App() {
           </div>
         </footer>
       </div>
+
+      {/* Password Modal */}
+      <AnimatePresence>
+        {showPasswordModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="w-full max-w-sm bg-[#111] border border-white/10 p-8 rounded-3xl shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-3">
+                  <Lock className="w-5 h-5 text-brand" />
+                  <span className="text-sm font-bold uppercase tracking-widest">Acceso Panel</span>
+                </div>
+                <button onClick={() => setShowPasswordModal(false)} className="text-white/40 hover:text-white transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div>
+                  <label className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3 block">Contraseña de Administrador</label>
+                  <input
+                    autoFocus
+                    type="password"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    placeholder="••••"
+                    className={`w-full bg-black/50 border ${loginError ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)]' : 'border-white/10'} rounded-xl p-4 text-center text-2xl tracking-[0.5em] focus:border-brand outline-none transition-all`}
+                  />
+                  {loginError && <p className="text-[10px] text-red-500 mt-2 text-center uppercase tracking-widest font-bold">Contraseña Incorrecta</p>}
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-brand p-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(255,78,0,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all"
+                >
+                  Entrar
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Admin Control Panel */}
       <AnimatePresence>
@@ -373,6 +458,23 @@ export default function App() {
                 <div className="space-y-6">
                   <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-4">
                     <div>
+                      <label className="text-[9px] uppercase tracking-widest text-white/30 mb-2 block">Navigation Links</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <input 
+                          value={content.nav1} 
+                          onChange={(e) => setContent({...content, nav1: e.target.value})}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors"
+                          placeholder="Link 1"
+                        />
+                        <input 
+                          value={content.nav2} 
+                          onChange={(e) => setContent({...content, nav2: e.target.value})}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors"
+                          placeholder="Link 2"
+                        />
+                      </div>
+                    </div>
+                    <div>
                       <label className="text-[9px] uppercase tracking-widest text-white/30 mb-2 block">Slogan / Label</label>
                       <input 
                         value={content.label} 
@@ -398,6 +500,31 @@ export default function App() {
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors"
                       />
                     </div>
+                    <div>
+                      <label className="text-[9px] uppercase tracking-widest text-white/30 mb-2 block">Hero Button Text</label>
+                      <input 
+                        value={content.heroBtn} 
+                        onChange={(e) => setContent({...content, heroBtn: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] uppercase tracking-widest text-white/30 mb-2 block">Logo URL (PNG suggested)</label>
+                      <input 
+                        value={content.logo} 
+                        onChange={(e) => setContent({...content, logo: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] uppercase tracking-widest text-white/30 mb-2 block">Frase Inspiradora (Separar con coma)</label>
+                      <input 
+                        value={content.quote} 
+                        onChange={(e) => setContent({...content, quote: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors italic"
+                        placeholder="Las canciones no se escriben, se sienten"
+                      />
+                    </div>
                   </div>
 
                   {/* Feature Grid Editors */}
@@ -405,15 +532,28 @@ export default function App() {
                     <label className="text-[9px] uppercase tracking-widest text-white/30 block border-b border-white/5 pb-2">Cuadrícula de Esencia</label>
                     {content.features.map((f, idx) => (
                       <div key={idx} className="space-y-3 p-4 bg-black/20 rounded-xl border border-white/5">
-                        <input 
-                          value={f.title} 
-                          onChange={(e) => {
-                            const newFeatures = [...content.features];
-                            newFeatures[idx].title = e.target.value;
-                            setContent({...content, features: newFeatures});
-                          }}
-                          className="w-full bg-transparent border-b border-white/10 p-1 text-sm font-bold text-brand outline-none focus:border-brand"
-                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <input 
+                            value={f.title} 
+                            onChange={(e) => {
+                              const newFeatures = [...content.features];
+                              newFeatures[idx].title = e.target.value;
+                              setContent({...content, features: newFeatures});
+                            }}
+                            className="w-full bg-transparent border-b border-white/10 p-1 text-sm font-bold text-brand outline-none focus:border-brand"
+                            placeholder="Title"
+                          />
+                          <input 
+                            value={f.icon} 
+                            onChange={(e) => {
+                              const newFeatures = [...content.features];
+                              newFeatures[idx].icon = e.target.value;
+                              setContent({...content, features: newFeatures});
+                            }}
+                            className="w-full bg-transparent border-b border-white/10 p-1 text-[10px] text-white/40 outline-none focus:border-brand text-right"
+                            placeholder="01"
+                          />
+                        </div>
                         <textarea 
                           value={f.desc} 
                           onChange={(e) => {
@@ -434,28 +574,46 @@ export default function App() {
                       value={content.statsTitle} 
                       onChange={(e) => setContent({...content, statsTitle: e.target.value})}
                       rows={2}
-                      className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none"
+                      className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none mb-2"
+                    />
+                    <textarea 
+                      value={content.statsDesc} 
+                      onChange={(e) => setContent({...content, statsDesc: e.target.value})}
+                      rows={2}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-[12px] text-white/60 focus:border-brand outline-none"
                     />
                     <div className="space-y-4">
                       {content.stats.map((s, idx) => (
-                        <div key={idx} className="grid grid-cols-2 gap-2 p-3 bg-black/20 rounded-xl border border-white/5">
+                        <div key={idx} className="space-y-2 p-3 bg-black/20 rounded-xl border border-white/5">
+                          <div className="grid grid-cols-2 gap-2">
+                             <input 
+                              value={s.label} 
+                              onChange={(e) => {
+                                const newStats = [...content.stats];
+                                newStats[idx].label = e.target.value;
+                                setContent({...content, stats: newStats});
+                              }}
+                              className="bg-transparent border-b border-white/10 text-[10px] text-white/40 outline-none uppercase"
+                            />
+                            <input 
+                              value={s.value} 
+                              onChange={(e) => {
+                                const newStats = [...content.stats];
+                                newStats[idx].value = e.target.value;
+                                setContent({...content, stats: newStats});
+                              }}
+                              className="bg-transparent border-b border-white/10 text-brand text-sm outline-none text-right font-bold"
+                            />
+                          </div>
                           <input 
-                            value={s.label} 
+                            value={s.sub} 
                             onChange={(e) => {
                               const newStats = [...content.stats];
-                              newStats[idx].label = e.target.value;
+                              newStats[idx].sub = e.target.value;
                               setContent({...content, stats: newStats});
                             }}
-                            className="bg-transparent border-b border-white/10 text-[10px] text-white/40 outline-none uppercase"
-                          />
-                          <input 
-                            value={s.value} 
-                            onChange={(e) => {
-                              const newStats = [...content.stats];
-                              newStats[idx].value = e.target.value;
-                              setContent({...content, stats: newStats});
-                            }}
-                            className="bg-transparent border-b border-white/10 text-brand text-sm outline-none"
+                            className="w-full bg-transparent border-b border-white/10 text-[9px] text-white/30 outline-none uppercase tracking-widest"
+                            placeholder="Sub-label"
                           />
                         </div>
                       ))}
@@ -470,10 +628,31 @@ export default function App() {
                         onChange={(e) => setContent({...content, ctaTitle: e.target.value})}
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none"
                       />
+                      <textarea 
+                        value={content.ctaDesc} 
+                        onChange={(e) => setContent({...content, ctaDesc: e.target.value})}
+                        rows={2}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-[12px] text-white/60 focus:border-brand outline-none"
+                      />
                       <input 
                         value={content.ctaBtn} 
                         onChange={(e) => setContent({...content, ctaBtn: e.target.value})}
                         className="w-full bg-brand/10 border border-brand/20 rounded-lg p-3 text-sm font-bold text-brand outline-none"
+                      />
+                  </div>
+
+                  {/* Footer */}
+                  <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-4">
+                     <label className="text-[9px] uppercase tracking-widest text-white/30 block border-b border-white/5 pb-2">Pie de Página</label>
+                     <input 
+                        value={content.footerLabel} 
+                        onChange={(e) => setContent({...content, footerLabel: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none"
+                      />
+                      <input 
+                        value={content.footerCopy} 
+                        onChange={(e) => setContent({...content, footerCopy: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-[11px] focus:border-brand outline-none"
                       />
                   </div>
                 </div>

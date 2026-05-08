@@ -131,7 +131,27 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
     const tickerUpdate = () => {
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
-      ctx.drawImage(images.current.bg, 0, 0, cw, ch);
+      
+      // Cover logic for background image
+      const bg = images.current.bg;
+      const imgRatio = bg.width / bg.height;
+      const canvasRatio = cw / ch;
+      let drawW, drawH, drawX, drawY;
+
+      if (canvasRatio > imgRatio) {
+        drawW = cw;
+        drawH = cw / imgRatio;
+        drawX = 0;
+        drawY = (ch - drawH) / 2;
+      } else {
+        drawW = ch * imgRatio;
+        drawH = ch;
+        drawX = (cw - drawW) / 2;
+        drawY = 0;
+      }
+
+      ctx.drawImage(bg, drawX, drawY, drawW, drawH);
+      
       ctx.globalCompositeOperation = 'lighter';
       for (let i = 0; i < particleCount; i++) {
         if (particles.current[i]) particles.current[i].draw();
@@ -147,12 +167,12 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Liquid-like ultra-smooth easing
+      // Viscous liquid-like ultra-smooth damping
       gsap.to(mouseProps.current, {
-        duration: 10,
+        duration: 12,
         x: e.clientX,
         y: e.clientY,
-        ease: 'power4.out',
+        ease: 'expo.out',
         overwrite: true,
       });
     };
