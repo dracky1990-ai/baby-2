@@ -92,6 +92,41 @@ export default function App() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, filter: "blur(10px)", scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: "blur(0px)",
+      scale: 1,
+      transition: { 
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1] 
+      }
+    }
+  };
+
+  const textBlurVariants = {
+    hidden: { opacity: 0, filter: "blur(20px)", scale: 1.1 },
+    visible: { 
+      opacity: 1, 
+      filter: "blur(0px)", 
+      scale: 1,
+      transition: { duration: 1.2, ease: "easeOut" }
+    }
+  };
+
   return (
     <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden">
       <BackgroundVideo src={bgVideo} />
@@ -158,7 +193,7 @@ export default function App() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={{
               visible: { transition: { staggerChildren: 0.05, delayChildren: 0.2 } }
             }}
@@ -191,7 +226,7 @@ export default function App() {
             <motion.h1 
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: false, amount: 0.1 }}
               variants={{
                 visible: { transition: { staggerChildren: 0.03 } }
               }}
@@ -287,9 +322,10 @@ export default function App() {
         {/* Section 1.5: Quote */}
         <section className="py-12 md:py-24 px-6 md:px-12 lg:px-24 text-center max-w-4xl mx-auto">
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.5 }}
+            variants={textBlurVariants}
             className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-serif italic text-white leading-snug drop-shadow-xl"
           >
             "{content.quote.split(',')[0]}, <span className="text-glow text-brand">{content.quote.split(',')[1]}</span>."
@@ -298,14 +334,17 @@ export default function App() {
 
         {/* Section 2: Features Grid */}
         <section className="py-12 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-px bg-white/5 md:bg-white/10 border border-white/10 md:border-white/20 rounded-[2rem] md:rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl p-px">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.1 }}
+            variants={containerVariants}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-px bg-white/5 md:bg-white/10 border border-white/10 md:border-white/20 rounded-[2rem] md:rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl p-px"
+          >
             {content.features.map((feature, i) => (
               <motion.div 
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                variants={itemVariants}
                 className="p-8 md:p-12 bg-black/40 md:bg-black/60 hover:bg-white/[0.05] transition-colors group rounded-[1.8rem] md:rounded-none"
               >
                 <div className="font-mono text-brand text-xs md:text-sm mb-4 md:mb-8 opacity-90 group-hover:opacity-100 transition-opacity tracking-widest font-bold">{feature.icon}</div>
@@ -313,18 +352,26 @@ export default function App() {
                 <p className="text-sm md:text-base text-white/80 leading-relaxed drop-shadow-md"> {feature.desc} </p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* Section 3: Technical Specs */}
         <section className="py-12 md:py-32 px-6 sm:px-12 lg:px-24 bg-gradient-to-b from-transparent via-black/40 to-black/80">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-center">
             <div className="text-left">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light mb-4 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-[1.1]">{content.statsTitle}</h2>
+              <motion.h2 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.5 }}
+                variants={textBlurVariants}
+                className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light mb-4 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-[1.1]"
+              >
+                {content.statsTitle}
+              </motion.h2>
               <motion.p 
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: false, amount: 0.2 }}
                 variants={{
                   visible: { transition: { staggerChildren: 0.02 } }
                 }}
@@ -350,22 +397,19 @@ export default function App() {
               {content.stats.map((stat, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: 30, filter: "blur(10px)" }}
-                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                  viewport={{ once: true }}
-                  transition={{ 
-                    duration: 1,
-                    delay: i * 0.15,
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: false, amount: 0.2 }}
+                  variants={itemVariants}
+                  transition={{ delay: i * 0.1 }}
                   className="flex flex-col gap-1 border-b border-white/5 pb-6 md:border-0 md:pb-0 group"
                 >
                   <div className="text-[10px] tracking-[0.2em] uppercase text-white/40 mb-1 font-bold drop-shadow-sm transition-colors group-hover:text-brand/60">{stat.label}</div>
                   <motion.div 
-                    initial={{ y: 20, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: (i * 0.15) + 0.3, duration: 0.8 }}
+                    variants={{
+                      hidden: { y: 20, opacity: 0 },
+                      visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
+                    }}
                     className="font-mono text-xl sm:text-2xl md:text-3xl tracking-tighter text-brand drop-shadow-[0_0_15px_rgba(255,78,0,0.4)]"
                   >
                     {stat.value}
@@ -380,18 +424,17 @@ export default function App() {
         {/* Section 4: CTA */}
         <section className="py-16 md:py-48 px-6 md:px-12 lg:px-24 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.3 }}
+            variants={itemVariants}
             className="max-w-3xl mx-auto rounded-[2rem] md:rounded-[40px] p-10 sm:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group shadow-2xl"
           >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             
             <motion.h2 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
               variants={{
+                hidden: { opacity: 0 },
                 visible: { transition: { staggerChildren: 0.02 } }
               }}
               className="text-4xl sm:text-5xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-[1.1] overflow-hidden"
@@ -438,9 +481,15 @@ export default function App() {
 
         {/* Section 5: Final Footer */}
         <footer className="py-12 md:py-24 px-6 md:px-8 lg:px-24">
-          <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.1 }}
+            variants={containerVariants}
+            className="max-w-7xl mx-auto"
+          >
             <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/10 pt-16 md:pt-24 pb-8 md:pb-12">
-              <div className="flex items-center gap-8 opacity-80">
+              <motion.div variants={itemVariants} className="flex items-center gap-8 opacity-80">
                 <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
                   <Twitter className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
                 </motion.div>
@@ -448,22 +497,25 @@ export default function App() {
                   <Github className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
                 </motion.div>
                 <span className="text-[11px] tracking-[0.3em] uppercase font-black text-white/50 border-l border-white/20 pl-8">Barbara Higuera Lab</span>
-                <motion.button
-                  whileHover={{ scale: 1.3, color: "#ff4e00" }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => setShowPasswordModal(true)}
-                  className="opacity-40 hover:opacity-100 transition-all pointer-events-auto p-2 ml-4 bg-white/5 rounded-full border border-white/10"
-                >
-                  <Lock className="w-4 h-4" />
-                </motion.button>
-              </div>
+              </motion.div>
               
-              <div className="text-center md:text-right">
+              <motion.div variants={itemVariants} className="text-center md:text-right flex flex-col items-center md:items-end group">
                 <div className="text-[10px] tracking-[0.4em] uppercase text-white/80 mb-2 font-bold italic drop-shadow-md">{content.footerLabel}</div>
-                <div className="text-[10px] tracking-widest uppercase text-white/70 font-bold drop-shadow-sm">{content.footerCopy}</div>
-              </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-[10px] tracking-widest uppercase text-white/70 font-bold drop-shadow-sm">{content.footerCopy}</div>
+                  <motion.button
+                    whileHover={{ opacity: 1, scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowPasswordModal(true)}
+                    className="opacity-[0.08] hover:opacity-100 transition-all pointer-events-auto p-1"
+                    title=""
+                  >
+                    <Lock className="w-2.5 h-2.5" />
+                  </motion.button>
+                </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </footer>
       </div>
 
