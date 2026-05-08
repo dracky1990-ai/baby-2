@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import BackgroundCanvas from './components/BackgroundCanvas';
-import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight, Github, Twitter, Lock, Save, Layout, Type } from 'lucide-react';
+import BackgroundVideo from './components/BackgroundVideo';
+import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight, Github, Twitter, Lock, Save, Layout, Type, Film } from 'lucide-react';
 
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
+  bgVideo: "https://ik.imagekit.io/x8axvbbz3/V%C3%ADdeo%20sin%20t%C3%ADtulo%20(1).mp4", // Background video provided by user
   label: "La Musa Escénica",
   nav1: "Esencia",
   nav2: "Universo",
@@ -41,9 +43,11 @@ const PRESETS = [
 export default function App() {
   const [content, setContent] = useState(INITIAL_CONTENT);
   const [bgImage, setBgImage] = useState(PRESETS[0].url);
+  const [bgVideo, setBgVideo] = useState(INITIAL_CONTENT.bgVideo);
   const [particleCount, setParticleCount] = useState(105);
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
@@ -75,9 +79,23 @@ export default function App() {
     }
   };
 
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setBgVideo(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden">
-      <BackgroundCanvas bgImage={bgImage} particleCount={particleCount} />
+      <BackgroundVideo src={bgVideo} />
+      <BackgroundCanvas bgImage={bgVideo ? "" : bgImage} particleCount={particleCount} />
       
       {/* Navigation */}
       <nav className="fixed md:absolute top-0 w-full p-4 sm:p-6 md:p-8 lg:p-16 flex justify-between items-center z-[60] pointer-events-none bg-black/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border-b border-white/5 md:border-0">
@@ -85,8 +103,8 @@ export default function App() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           whileHover={{ 
-            scale: 1.1, 
-            filter: "brightness(1.6) drop-shadow(0 0 40px rgba(255,78,0,0.8))",
+            scale: 1.05, 
+            filter: "brightness(1.6) drop-shadow(0 0 60px rgba(255,78,0,0.8))",
             transition: { duration: 0.3 }
           }}
           whileTap={{ scale: 0.95 }}
@@ -95,7 +113,7 @@ export default function App() {
           <img 
             src={content.logo} 
             alt="Logo" 
-            className="w-44 h-44 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain filter drop-shadow-[0_0_60px_rgba(255,78,0,0.5)] brightness-125 transition-all duration-700"
+            className="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,0.4)] brightness-125 transition-all duration-700"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -136,52 +154,110 @@ export default function App() {
       {/* Landing Page Content */}
       <div className="relative z-10 w-full overflow-hidden">
         {/* Section 1: Hero */}
-        <section className="min-h-screen flex flex-col justify-center pt-64 sm:pt-72 md:pt-64 lg:pt-80 pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <section className="min-h-screen flex flex-col justify-center pt-80 sm:pt-96 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={{
+              visible: { transition: { staggerChildren: 0.05, delayChildren: 0.2 } }
+            }}
             className="text-[10px] sm:text-xs md:text-sm tracking-[0.4em] sm:tracking-[0.6em] uppercase font-bold text-brand mb-4 md:mb-8 flex items-center gap-3 md:gap-4 drop-shadow-[0_0_20px_rgba(255,78,0,0.5)]"
           >
-            <div className="w-6 sm:w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
-            <span className="drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">{content.label}</span>
+            <motion.div 
+              variants={{
+                hidden: { scaleX: 0, originX: 0 },
+                visible: { scaleX: 1, transition: { duration: 1, ease: "circOut" } }
+              }}
+              className="w-6 sm:w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" 
+            />
+            <div className="flex overflow-hidden">
+              {content.label.split('').map((char, i) => (
+                <motion.span
+                  key={i}
+                  variants={{
+                    hidden: { y: "100%", opacity: 0 },
+                    visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                  }}
+                  className="inline-block"
+                >
+                  {char === ' ' ? '\u00A0' : char}
+                </motion.span>
+              ))}
+            </div>
           </motion.div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="text-4xl sm:text-5xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-tight md:tracking-[-4px] leading-[1.0] sm:leading-[1.1] md:leading-[0.8] mb-8 md:mb-16 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line"
-          >
-            {content.heroTitle.split('\n').map((line, i) => (
-              <React.Fragment key={i}>
-                {line.includes('Emociones') ? (
-                  <span className="italic text-glow drop-shadow-[0_0_40px_rgba(255,78,0,0.8)] block sm:inline">{line}</span>
-                ) : line}
-                {i === 0 && <br className="hidden sm:block" />}
-              </React.Fragment>
-            ))}
-          </motion.h1>
+          <div className="flex flex-col gap-8 md:gap-16">
+            <motion.h1 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.03 } }
+              }}
+              className="text-4xl sm:text-5xl md:text-[80px] lg:text-[110px] font-serif font-light tracking-tight md:tracking-[-4px] leading-[1.0] sm:leading-[1.1] md:leading-[0.8] mb-4 md:mb-8 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line overflow-hidden"
+            >
+              {content.heroTitle.split('\n').map((line, i) => (
+                <div key={i} className="flex flex-wrap items-center">
+                  {line.split(' ').map((word, wordIdx) => (
+                    <div key={wordIdx} className="flex overflow-hidden mr-[0.3em] py-2">
+                      {word.split('').map((char, charIdx) => (
+                        <motion.span
+                          key={charIdx}
+                          variants={{
+                            hidden: { y: "150%", opacity: 0 },
+                            visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+                          }}
+                          className={word.includes('Emociones') ? "italic text-glow drop-shadow-[0_0_40px_rgba(255,78,0,0.8)]" : ""}
+                        >
+                          {char}
+                        </motion.span>
+                      ))}
+                    </div>
+                  ))}
+                  {i === 0 && <div className="w-full hidden sm:block" />}
+                </div>
+              ))}
+            </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="text-base sm:text-lg md:text-xl text-white/90 max-w-[500px] leading-relaxed mb-10 md:mb-12 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] font-medium"
-          >
-            {content.heroDesc}
-          </motion.p>
+            <motion.p
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.015, delayChildren: 0.8 } }
+              }}
+              className="text-base sm:text-lg md:text-xl text-white/90 max-w-[500px] leading-relaxed mb-6 md:mb-8 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] font-medium"
+            >
+              {content.heroDesc.split(' ').map((word, i) => (
+                <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
+                  <motion.span
+                    variants={{
+                      hidden: { y: "100%", opacity: 0 },
+                      visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: [0.33, 1, 0.68, 1] } }
+                    }}
+                    className="inline-block"
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
+            </motion.p>
+          </div>
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
+            variants={{
+              visible: { transition: { staggerChildren: 0.1, delayChildren: 1.2 } }
+            }}
           >
             <motion.button 
+              variants={{
+                hidden: { opacity: 0, x: -20 },
+                visible: { opacity: 1, x: 0, transition: { duration: 0.8 } }
+              }}
               whileHover={{ 
                 scale: 1.08, 
                 x: 10, 
@@ -195,7 +271,15 @@ export default function App() {
               <span className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white/80 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/30 bg-black/60 backdrop-blur-md group-hover:shadow-[0_0_60px_rgba(255,78,0,1)]">
                 <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-2" />
               </span>
-              <span className="group-hover:text-brand group-hover:drop-shadow-[0_0_25px_rgba(255,78,0,0.9)] transition-all drop-shadow-[0_4px_20px_rgba(0,0,0,1)]">{content.heroBtn}</span>
+              <motion.span 
+                variants={{
+                  hidden: { opacity: 0, filter: "blur(4px)" },
+                  visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.8 } }
+                }}
+                className="group-hover:text-brand group-hover:drop-shadow-[0_0_25px_rgba(255,78,0,0.9)] transition-all drop-shadow-[0_4px_20px_rgba(0,0,0,1)]"
+              >
+                {content.heroBtn}
+              </motion.span>
             </motion.button>
           </motion.div>
         </section>
@@ -237,24 +321,56 @@ export default function App() {
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 items-center">
             <div className="text-left">
               <h2 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-light mb-6 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-tight">{content.statsTitle}</h2>
-              <p className="text-white/90 max-w-md text-base sm:text-lg leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] font-medium">
-                {content.statsDesc}
-              </p>
+              <motion.p 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{
+                  visible: { transition: { staggerChildren: 0.02 } }
+                }}
+                className="text-white/90 max-w-md text-base sm:text-lg leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] font-medium"
+              >
+                {content.statsDesc.split(' ').map((word, i) => (
+                  <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
+                    <motion.span
+                      variants={{
+                        hidden: { y: "100%", opacity: 0 },
+                        visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+                      }}
+                      className="inline-block"
+                    >
+                      {word}
+                    </motion.span>
+                  </span>
+                ))}
+              </motion.p>
             </div>
             
             <div className="flex flex-col gap-6 sm:gap-10 border-t md:border-t-0 md:border-l border-white/10 pt-10 md:pt-4 md:pl-12">
               {content.stats.map((stat, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: 30, filter: "blur(10px)" }}
+                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex flex-col gap-1 border-b border-white/5 pb-6 md:border-0 md:pb-0"
+                  transition={{ 
+                    duration: 1,
+                    delay: i * 0.15,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="flex flex-col gap-1 border-b border-white/5 pb-6 md:border-0 md:pb-0 group"
                 >
-                  <div className="text-[10px] tracking-[0.2em] uppercase text-white/50 mb-1 font-bold drop-shadow-sm">{stat.label}</div>
-                  <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-tighter text-brand drop-shadow-[0_0_15px_rgba(255,78,0,0.4)]">{stat.value}</div>
-                  <div className="text-[10px] sm:text-[11px] text-white/40 uppercase tracking-[0.2em] mt-1 italic">{stat.sub}</div>
+                  <div className="text-[10px] tracking-[0.2em] uppercase text-white/40 mb-1 font-bold drop-shadow-sm transition-colors group-hover:text-brand/60">{stat.label}</div>
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: (i * 0.15) + 0.3, duration: 0.8 }}
+                    className="font-mono text-xl sm:text-2xl md:text-3xl tracking-tighter text-brand drop-shadow-[0_0_15px_rgba(255,78,0,0.4)]"
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <div className="text-[10px] sm:text-[11px] text-white/30 uppercase tracking-[0.2em] mt-1 italic">{stat.sub}</div>
                 </motion.div>
               ))}
             </div>
@@ -271,7 +387,35 @@ export default function App() {
           >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             
-            <h2 className="text-3xl sm:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-tight">{content.ctaTitle}</h2>
+            <motion.h2 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.02 } }
+              }}
+              className="text-3xl sm:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-tight overflow-hidden"
+            >
+              {content.ctaTitle.split('\n').map((line, i) => (
+                <div key={i} className="flex flex-wrap justify-center">
+                  {line.split(' ').map((word, wordIdx) => (
+                    <div key={wordIdx} className="flex overflow-hidden mr-[0.3em] py-1">
+                      {word.split('').map((char, charIdx) => (
+                        <motion.span
+                          key={charIdx}
+                          variants={{
+                            hidden: { y: "120%", opacity: 0 },
+                            visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "circOut" } }
+                          }}
+                        >
+                          {char}
+                        </motion.span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </motion.h2>
             <p className="text-white/80 sm:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base leading-relaxed px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
               {content.ctaDesc}
             </p>
@@ -423,6 +567,43 @@ export default function App() {
                       onChange={(e) => setParticleCount(Number(e.target.value))}
                       className="w-full accent-brand bg-white/10 h-1 rounded-full cursor-pointer pointer-events-auto appearance-none"
                     />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] tracking-[0.2em] uppercase text-white/40 mb-4 block underline decoration-brand/30">Video de Fondo (Loop)</label>
+                    <div className="space-y-4">
+                      <div className="flex gap-2">
+                        <input 
+                          type="text"
+                          value={bgVideo}
+                          onChange={(e) => setBgVideo(e.target.value)}
+                          placeholder="URL del video (mp4)"
+                          className="flex-1 bg-black/40 border border-white/10 rounded-lg p-2 text-xs focus:border-brand outline-none"
+                        />
+                        <button 
+                          onClick={() => videoInputRef.current?.click()}
+                          className="p-2 bg-brand/10 border border-brand/20 rounded-lg text-brand hover:bg-brand hover:text-white transition-all"
+                          title="Subir Video"
+                        >
+                          <Upload className="w-4 h-4" />
+                        </button>
+                        <button 
+                          onClick={() => setBgVideo("")}
+                          className="p-2 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-all"
+                          title="Eliminar Video"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        <input 
+                          ref={videoInputRef}
+                          type="file" 
+                          accept="video/mp4" 
+                          className="hidden" 
+                          onChange={handleVideoUpload}
+                        />
+                      </div>
+                      <p className="text-[8px] text-white/30 italic">Tip: Use un video de alta calidad en formato .mp4 para mejores resultados.</p>
+                    </div>
                   </div>
 
                   <div>

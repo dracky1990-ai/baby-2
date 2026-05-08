@@ -129,28 +129,34 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
     images.current.lights.forEach(img => (img.onload = onLightLoad));
 
     const tickerUpdate = () => {
-      ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = 'source-over';
-      
-      // Cover logic for background image
       const bg = images.current.bg;
-      const imgRatio = bg.width / bg.height;
-      const canvasRatio = cw / ch;
-      let drawW, drawH, drawX, drawY;
+      
+      if (bg.src && bg.complete && bg.naturalWidth !== 0) {
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+        
+        // Cover logic for background image
+        const imgRatio = bg.width / bg.height;
+        const canvasRatio = cw / ch;
+        let drawW, drawH, drawX, drawY;
 
-      if (canvasRatio > imgRatio) {
-        drawW = cw;
-        drawH = cw / imgRatio;
-        drawX = 0;
-        drawY = (ch - drawH) / 2;
+        if (canvasRatio > imgRatio) {
+          drawW = cw;
+          drawH = cw / imgRatio;
+          drawX = 0;
+          drawY = (ch - drawH) / 2;
+        } else {
+          drawW = ch * imgRatio;
+          drawH = ch;
+          drawX = (cw - drawW) / 2;
+          drawY = 0;
+        }
+
+        ctx.drawImage(bg, drawX, drawY, drawW, drawH);
       } else {
-        drawW = ch * imgRatio;
-        drawH = ch;
-        drawX = (cw - drawW) / 2;
-        drawY = 0;
+        // Just clear if no image
+        ctx.clearRect(0, 0, cw, ch);
       }
-
-      ctx.drawImage(bg, drawX, drawY, drawW, drawH);
       
       ctx.globalCompositeOperation = 'lighter';
       for (let i = 0; i < particleCount; i++) {
@@ -195,7 +201,7 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full -z-10 bg-black"
+      className="fixed inset-0 w-full h-full -z-10"
     />
   );
 };
