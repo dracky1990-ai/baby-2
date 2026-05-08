@@ -142,7 +142,7 @@ export default function App() {
       <BackgroundCanvas bgImage={bgVideo ? "" : bgImage} particleCount={particleCount} />
       
       {/* Navigation */}
-      <nav className="fixed md:absolute top-0 w-full p-4 sm:p-6 md:p-8 lg:p-16 flex justify-between items-center z-[60] pointer-events-none bg-black/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border-b border-white/5 md:border-0">
+      <nav className="fixed md:absolute top-0 w-full p-2 sm:p-6 md:p-8 lg:p-16 flex justify-between items-center z-[60] pointer-events-none bg-black/20 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border-b border-white/5 md:border-0">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -158,7 +158,7 @@ export default function App() {
           <img 
             src={content.logo} 
             alt="Logo" 
-            className="w-32 h-32 sm:w-48 sm:h-48 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,0.4)] brightness-125 transition-all duration-700 slide-in-bck-bottom"
+            className="w-28 h-28 sm:w-48 sm:h-48 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,0.4)] brightness-125 transition-all duration-700 slide-in-bck-bottom"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -177,7 +177,7 @@ export default function App() {
               color: "#fff" 
             }}
             whileTap={{ scale: 0.9 }}
-            className="text-white font-black hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
+            className="text-white font-medium hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
           >
             {content.nav1}
           </motion.a>
@@ -189,7 +189,7 @@ export default function App() {
               color: "#fff" 
             }}
             whileTap={{ scale: 0.9 }}
-            className="text-white font-black hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
+            className="text-white font-medium hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
           >
             {content.nav2}
           </motion.a>
@@ -199,7 +199,7 @@ export default function App() {
       {/* Landing Page Content */}
       <div className="relative z-10 w-full overflow-hidden">
         {/* Section 1: Hero */}
-        <section className="min-h-screen flex flex-col justify-center pt-32 sm:pt-40 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <section className="min-h-screen flex flex-col justify-center pt-24 sm:pt-20 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -240,7 +240,7 @@ export default function App() {
               variants={{
                 visible: { transition: { staggerChildren: 0.03 } }
               }}
-              className="text-5xl sm:text-6xl md:text-[80px] lg:text-[110px] font-serif font-light tracking-tight md:tracking-[-4px] leading-[0.95] sm:leading-[1.1] md:leading-[0.8] mb-4 md:mb-8 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line overflow-hidden"
+              className="text-5xl sm:text-6xl md:text-[80px] lg:text-[110px] font-serif font-extralight tracking-tight md:tracking-[-4px] leading-[0.95] sm:leading-[1.1] md:leading-[0.8] mb-4 md:mb-8 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line overflow-hidden"
             >
               {content.heroTitle.split('\n').map((line, i) => (
                 <div key={i} className="flex flex-wrap items-center">
@@ -268,7 +268,7 @@ export default function App() {
             <motion.p
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: false, amount: 0.3 }}
               variants={{
                 visible: { transition: { staggerChildren: 0.015, delayChildren: 0.8 } }
               }}
@@ -482,7 +482,7 @@ export default function App() {
                 filter: "brightness(1.1)"
               }}
               whileTap={{ scale: 0.92 }}
-              className="px-8 py-5 sm:px-20 sm:py-8 bg-brand text-white font-black rounded-full transition-all shadow-2xl shadow-brand/60 relative z-10 text-[10px] md:text-sm tracking-widest uppercase border-2 border-white/30"
+              className="px-8 py-5 sm:px-20 sm:py-8 bg-brand text-white font-bold rounded-full transition-all shadow-2xl shadow-brand/60 relative z-10 text-[10px] md:text-sm tracking-widest uppercase border-2 border-white/30"
             >
               {content.ctaBtn}
             </motion.button>
@@ -506,7 +506,7 @@ export default function App() {
                 <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
                   <Github className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
                 </motion.div>
-                <span className="text-[11px] tracking-[0.3em] uppercase font-black text-white/50 border-l border-white/20 pl-8">Barbara Higuera Lab</span>
+                <span className="text-[11px] tracking-[0.3em] uppercase font-bold text-white/50 border-l border-white/20 pl-8">Barbara Higuera Lab</span>
               </motion.div>
               
               <motion.div variants={itemVariants} className="text-center md:text-right flex flex-col items-center md:items-end group">
