@@ -147,12 +147,12 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Smoother, fluid-like easing with long duration
+      // Liquid-like ultra-smooth easing
       gsap.to(mouseProps.current, {
-        duration: 8,
+        duration: 10,
         x: e.clientX,
         y: e.clientY,
-        ease: 'power2.out',
+        ease: 'power4.out',
         overwrite: true,
       });
     };
