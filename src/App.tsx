@@ -76,26 +76,26 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden drop-shadow-[0_2px_15px_rgba(0,0,0,0.5)]">
+    <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden">
       <BackgroundCanvas bgImage={bgImage} particleCount={particleCount} />
       
       {/* Navigation */}
-      <nav className="fixed md:absolute top-0 w-full p-4 md:p-8 lg:p-16 flex justify-between items-center z-50 pointer-events-none bg-black/20 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none">
+      <nav className="fixed md:absolute top-0 w-full p-4 sm:p-6 md:p-8 lg:p-16 flex justify-between items-center z-[60] pointer-events-none bg-black/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border-b border-white/5 md:border-0">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           whileHover={{ 
             scale: 1.1, 
-            filter: "brightness(1.8) drop-shadow(0 0 60px rgba(255,78,0,1))",
-            transition: { duration: 0.6, ease: "easeOut" }
+            filter: "brightness(1.6) drop-shadow(0 0 40px rgba(255,78,0,0.8))",
+            transition: { duration: 0.3 }
           }}
           whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-4 group cursor-pointer pointer-events-auto transition-all duration-700"
+          className="flex items-center gap-4 group cursor-pointer pointer-events-auto transition-all"
         >
           <img 
             src={content.logo} 
             alt="Logo" 
-            className="w-24 h-24 sm:w-32 sm:h-32 md:w-64 md:h-64 lg:w-[580px] lg:h-[580px] object-contain filter drop-shadow-[0_0_100px_rgba(255,78,0,0.8)] brightness-150 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="w-44 h-44 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain filter drop-shadow-[0_0_60px_rgba(255,78,0,0.5)] brightness-125 transition-all duration-700"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -136,16 +136,16 @@ export default function App() {
       {/* Landing Page Content */}
       <div className="relative z-10 w-full overflow-hidden">
         {/* Section 1: Hero */}
-        <section className="min-h-screen flex flex-col justify-center pt-32 sm:pt-40 md:pt-48 lg:pt-64 pb-12 sm:pb-20 md:pb-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+        <section className="min-h-screen flex flex-col justify-center pt-64 sm:pt-72 md:pt-64 lg:pt-80 pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-[10px] md:text-sm tracking-[0.5em] md:tracking-[0.6em] uppercase font-bold text-brand mb-4 md:mb-8 flex items-center gap-3 md:gap-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+            className="text-[10px] sm:text-xs md:text-sm tracking-[0.4em] sm:tracking-[0.6em] uppercase font-bold text-brand mb-4 md:mb-8 flex items-center gap-3 md:gap-4 drop-shadow-[0_0_20px_rgba(255,78,0,0.5)]"
           >
-            <div className="w-8 sm:w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
-            {content.label}
+            <div className="w-6 sm:w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
+            <span className="drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">{content.label}</span>
           </motion.div>
 
           <motion.h1 
@@ -153,12 +153,12 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-4xl xs:text-5xl sm:text-6xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-[-1px] md:tracking-[-4px] leading-[1.0] sm:leading-[1.1] md:leading-[0.8] mb-8 md:mb-16 drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] whitespace-pre-line overflow-wrap-anywhere"
+            className="text-4xl sm:text-5xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-tight md:tracking-[-4px] leading-[1.0] sm:leading-[1.1] md:leading-[0.8] mb-8 md:mb-16 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line"
           >
             {content.heroTitle.split('\n').map((line, i) => (
               <React.Fragment key={i}>
                 {line.includes('Emociones') ? (
-                  <span className="italic text-glow drop-shadow-[0_0_30px_rgba(255,78,0,0.6)] block sm:inline">{line}</span>
+                  <span className="italic text-glow drop-shadow-[0_0_40px_rgba(255,78,0,0.8)] block sm:inline">{line}</span>
                 ) : line}
                 {i === 0 && <br className="hidden sm:block" />}
               </React.Fragment>
@@ -170,7 +170,7 @@ export default function App() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="text-base sm:text-lg md:text-xl text-white max-w-[520px] leading-relaxed mb-10 md:mb-12 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
+            className="text-base sm:text-lg md:text-xl text-white/90 max-w-[500px] leading-relaxed mb-10 md:mb-12 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] font-medium"
           >
             {content.heroDesc}
           </motion.p>
@@ -183,19 +183,19 @@ export default function App() {
           >
             <motion.button 
               whileHover={{ 
-                scale: 1.12, 
+                scale: 1.08, 
                 x: 10, 
                 filter: "brightness(1.3)", 
                 textShadow: "0 0 20px rgba(255,100,0,0.8)",
-                boxShadow: "0 10px 40px rgba(255,78,0,0.3)"
+                boxShadow: "0 10px 50px rgba(255,78,0,0.5)"
               }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-4 text-[10px] md:text-sm tracking-[0.3em] uppercase font-black group drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] px-2"
+              className="flex items-center gap-4 text-[11px] sm:text-sm tracking-[0.3em] uppercase font-black group drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] px-1"
             >
-              <span className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white/80 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/30 bg-black/50 backdrop-blur-md group-hover:shadow-[0_0_50px_rgba(255,78,0,0.8)]">
-                <ArrowRight className="w-4 h-4 md:w-6 md:h-6 transition-transform group-hover:translate-x-2" />
+              <span className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white/80 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/30 bg-black/60 backdrop-blur-md group-hover:shadow-[0_0_60px_rgba(255,78,0,1)]">
+                <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-2" />
               </span>
-              <span className="group-hover:text-brand group-hover:drop-shadow-[0_0_20px_rgba(255,78,0,0.8)] transition-all">{content.heroBtn}</span>
+              <span className="group-hover:text-brand group-hover:drop-shadow-[0_0_25px_rgba(255,78,0,0.9)] transition-all drop-shadow-[0_4px_20px_rgba(0,0,0,1)]">{content.heroBtn}</span>
             </motion.button>
           </motion.div>
         </section>
@@ -233,17 +233,16 @@ export default function App() {
         </section>
 
         {/* Section 3: Technical Specs */}
-        <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-transparent to-black/80">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-12 items-end">
-            <div>
-              <h2 className="text-3xl md:text-4xl lg:text-6xl font-serif font-light mb-6 md:mb-8 italic tracking-tight drop-shadow-2xl whitespace-pre-line">{content.statsTitle}</h2>
-              <p className="text-white max-w-md text-base md:text-lg leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] font-medium">
+        <section className="py-20 md:py-32 px-6 sm:px-12 lg:px-24 bg-gradient-to-b from-transparent via-black/40 to-black/80">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 items-center">
+            <div className="text-left">
+              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-light mb-6 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-tight">{content.statsTitle}</h2>
+              <p className="text-white/90 max-w-md text-base sm:text-lg leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] font-medium">
                 {content.statsDesc}
               </p>
             </div>
             
-            
-            <div className="flex flex-col gap-8 md:gap-12 border-t md:border-t-0 md:border-l border-white/10 pt-10 md:pt-0 md:pl-12">
+            <div className="flex flex-col gap-6 sm:gap-10 border-t md:border-t-0 md:border-l border-white/10 pt-10 md:pt-4 md:pl-12">
               {content.stats.map((stat, i) => (
                 <motion.div
                   key={i}
@@ -251,11 +250,11 @@ export default function App() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex flex-col gap-1"
+                  className="flex flex-col gap-1 border-b border-white/5 pb-6 md:border-0 md:pb-0"
                 >
-                  <div className="text-[10px] tracking-[0.2em] uppercase text-white/60 mb-1 font-bold">{stat.label}</div>
-                  <div className="font-mono text-xl md:text-2xl tracking-tighter text-brand drop-shadow-lg">{stat.value}</div>
-                  <div className="text-[9px] text-white/50 uppercase tracking-[0.3em] mt-1 drop-shadow-sm">{stat.sub}</div>
+                  <div className="text-[10px] tracking-[0.2em] uppercase text-white/50 mb-1 font-bold drop-shadow-sm">{stat.label}</div>
+                  <div className="font-mono text-xl sm:text-2xl md:text-3xl tracking-tighter text-brand drop-shadow-[0_0_15px_rgba(255,78,0,0.4)]">{stat.value}</div>
+                  <div className="text-[10px] sm:text-[11px] text-white/40 uppercase tracking-[0.2em] mt-1 italic">{stat.sub}</div>
                 </motion.div>
               ))}
             </div>
@@ -273,7 +272,7 @@ export default function App() {
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             
             <h2 className="text-3xl sm:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-tight">{content.ctaTitle}</h2>
-            <p className="text-white/70 sm:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base leading-relaxed px-4">
+            <p className="text-white/80 sm:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base leading-relaxed px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
               {content.ctaDesc}
             </p>
             
