@@ -6,7 +6,7 @@ import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight,
 
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
-  bgVideo: "https://ik.imagekit.io/x8axvbbz3/V%C3%ADdeo%20sin%20t%C3%ADtulo%20(1).mp4", // Background video provided by user
+  bgVideo: "https://ik.imagekit.io/x8axvbbz3/0508.mp4", // High quality background video
   label: "La Musa Escénica",
   nav1: "Esencia",
   nav2: "Universo",
@@ -113,7 +113,7 @@ export default function App() {
           <img 
             src={content.logo} 
             alt="Logo" 
-            className="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,0.4)] brightness-125 transition-all duration-700"
+            className="w-32 h-32 sm:w-48 sm:h-48 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,0.4)] brightness-125 transition-all duration-700 slide-in-bck-bottom"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -154,7 +154,7 @@ export default function App() {
       {/* Landing Page Content */}
       <div className="relative z-10 w-full overflow-hidden">
         {/* Section 1: Hero */}
-        <section className="min-h-screen flex flex-col justify-center pt-80 sm:pt-96 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+        <section className="min-h-screen flex flex-col justify-center pt-32 sm:pt-40 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -187,7 +187,7 @@ export default function App() {
             </div>
           </motion.div>
 
-          <div className="flex flex-col gap-8 md:gap-16">
+          <div className="flex flex-col gap-6 md:gap-16">
             <motion.h1 
               initial="hidden"
               whileInView="visible"
@@ -195,7 +195,7 @@ export default function App() {
               variants={{
                 visible: { transition: { staggerChildren: 0.03 } }
               }}
-              className="text-4xl sm:text-5xl md:text-[80px] lg:text-[110px] font-serif font-light tracking-tight md:tracking-[-4px] leading-[1.0] sm:leading-[1.1] md:leading-[0.8] mb-4 md:mb-8 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line overflow-hidden"
+              className="text-5xl sm:text-6xl md:text-[80px] lg:text-[110px] font-serif font-light tracking-tight md:tracking-[-4px] leading-[0.95] sm:leading-[1.1] md:leading-[0.8] mb-4 md:mb-8 drop-shadow-[0_10px_40px_rgba(0,0,0,1)] whitespace-pre-line overflow-hidden"
             >
               {content.heroTitle.split('\n').map((line, i) => (
                 <div key={i} className="flex flex-wrap items-center">
@@ -285,20 +285,20 @@ export default function App() {
         </section>
 
         {/* Section 1.5: Quote */}
-        <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 text-center max-w-4xl mx-auto">
+        <section className="py-12 md:py-24 px-6 md:px-12 lg:px-24 text-center max-w-4xl mx-auto">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl md:text-3xl lg:text-5xl font-serif italic text-white leading-tight drop-shadow-xl"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-serif italic text-white leading-snug drop-shadow-xl"
           >
             "{content.quote.split(',')[0]}, <span className="text-glow text-brand">{content.quote.split(',')[1]}</span>."
           </motion.p>
         </section>
 
         {/* Section 2: Features Grid */}
-        <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/20 rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl">
+        <section className="py-12 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-px bg-white/5 md:bg-white/10 border border-white/10 md:border-white/20 rounded-[2rem] md:rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl p-px">
             {content.features.map((feature, i) => (
               <motion.div 
                 key={i}
@@ -306,21 +306,21 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-8 md:p-12 bg-black/60 hover:bg-white/[0.05] transition-colors group"
+                className="p-8 md:p-12 bg-black/40 md:bg-black/60 hover:bg-white/[0.05] transition-colors group rounded-[1.8rem] md:rounded-none"
               >
-                <div className="font-mono text-brand text-xs md:text-sm mb-6 md:mb-8 opacity-90 group-hover:opacity-100 transition-opacity tracking-widest font-bold">{feature.icon}</div>
-                <h3 className="text-xl md:text-2xl font-serif italic mb-3 md:mb-4 tracking-tight drop-shadow-md text-white"> {feature.title} </h3>
-                <p className="text-sm md:text-base text-white leading-relaxed drop-shadow-md"> {feature.desc} </p>
+                <div className="font-mono text-brand text-xs md:text-sm mb-4 md:mb-8 opacity-90 group-hover:opacity-100 transition-opacity tracking-widest font-bold">{feature.icon}</div>
+                <h3 className="text-xl md:text-2xl font-serif italic mb-2 md:mb-4 tracking-tight drop-shadow-md text-white"> {feature.title} </h3>
+                <p className="text-sm md:text-base text-white/80 leading-relaxed drop-shadow-md"> {feature.desc} </p>
               </motion.div>
             ))}
           </div>
         </section>
 
         {/* Section 3: Technical Specs */}
-        <section className="py-20 md:py-32 px-6 sm:px-12 lg:px-24 bg-gradient-to-b from-transparent via-black/40 to-black/80">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 items-center">
+        <section className="py-12 md:py-32 px-6 sm:px-12 lg:px-24 bg-gradient-to-b from-transparent via-black/40 to-black/80">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-center">
             <div className="text-left">
-              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-serif font-light mb-6 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-tight">{content.statsTitle}</h2>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light mb-4 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-[1.1]">{content.statsTitle}</h2>
               <motion.p 
                 initial="hidden"
                 whileInView="visible"
@@ -378,12 +378,12 @@ export default function App() {
         </section>
 
         {/* Section 4: CTA */}
-        <section className="py-24 md:py-48 px-6 md:px-12 lg:px-24 text-center">
+        <section className="py-16 md:py-48 px-6 md:px-12 lg:px-24 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto rounded-[32px] md:rounded-[40px] p-8 sm:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group"
+            className="max-w-3xl mx-auto rounded-[2rem] md:rounded-[40px] p-10 sm:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group shadow-2xl"
           >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             
@@ -394,7 +394,7 @@ export default function App() {
               variants={{
                 visible: { transition: { staggerChildren: 0.02 } }
               }}
-              className="text-3xl sm:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-tight overflow-hidden"
+              className="text-4xl sm:text-5xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-[1.1] overflow-hidden"
             >
               {content.ctaTitle.split('\n').map((line, i) => (
                 <div key={i} className="flex flex-wrap justify-center">
@@ -437,9 +437,9 @@ export default function App() {
         </section>
 
         {/* Section 5: Final Footer */}
-        <footer className="py-24 px-8 lg:px-24">
+        <footer className="py-12 md:py-24 px-6 md:px-8 lg:px-24">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-t border-white/10 pt-24 pb-12">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/10 pt-16 md:pt-24 pb-8 md:pb-12">
               <div className="flex items-center gap-8 opacity-80">
                 <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
                   <Twitter className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
