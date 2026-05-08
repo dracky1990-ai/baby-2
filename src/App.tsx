@@ -34,7 +34,7 @@ export default function App() {
       <BackgroundCanvas bgImage={bgImage} particleCount={particleCount} />
       
       {/* Navigation */}
-      <nav className="absolute top-0 w-full p-8 lg:p-16 flex justify-between items-center z-50 pointer-events-none">
+      <nav className="absolute top-0 w-full p-6 md:p-8 lg:p-16 flex justify-between items-center z-50 pointer-events-none">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,7 +45,7 @@ export default function App() {
           <img 
             src="https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242" 
             alt="Barbara Higuera Logo" 
-            className="w-32 h-32 lg:w-48 lg:h-48 object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,1)] brightness-150 group-hover:drop-shadow-[0_0_150px_rgba(255,100,0,1)] group-hover:scale-110 group-active:scale-95 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="w-24 h-24 md:w-32 md:h-32 lg:w-48 lg:h-48 object-contain filter drop-shadow-[0_0_80px_rgba(255,78,0,1)] brightness-150 group-hover:drop-shadow-[0_0_150px_rgba(255,100,0,1)] group-hover:scale-110 group-active:scale-95 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -54,13 +54,13 @@ export default function App() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex items-center gap-8 text-[11px] tracking-[0.2em] uppercase text-white/90 pointer-events-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
+          className="flex items-center gap-4 md:gap-8 text-[9px] md:text-[11px] tracking-[0.2em] uppercase text-white/90 pointer-events-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
         >
           <motion.a 
             href="#" 
             whileHover={{ scale: 1.1, textShadow: "0 0 20px rgba(255,255,255,1)", color: "#fff" }}
             whileTap={{ scale: 0.9 }}
-            className="text-white/80 hover:text-white transition-all cursor-pointer"
+            className="hidden sm:block text-white/80 hover:text-white transition-all cursor-pointer"
           >
             Esencia
           </motion.a>
@@ -68,7 +68,7 @@ export default function App() {
             href="#" 
             whileHover={{ scale: 1.1, textShadow: "0 0 20px rgba(255,255,255,1)", color: "#fff" }}
             whileTap={{ scale: 0.9 }}
-            className="text-white/80 hover:text-white transition-all cursor-pointer"
+            className="hidden sm:block text-white/80 hover:text-white transition-all cursor-pointer"
           >
             Universo
           </motion.a>
@@ -81,10 +81,11 @@ export default function App() {
               boxShadow: "0 0 30px rgba(255,78,0,0.3)"
             }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-white/90 hover:text-white transition-all bg-black/40 backdrop-blur-md border border-white/30 px-8 py-3 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+            className="flex items-center gap-2 text-white/90 hover:text-white transition-all bg-black/40 backdrop-blur-md border border-white/30 px-5 py-2 md:px-8 md:py-3 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
           >
-            <Settings className="w-4 h-4" />
-            Configuración
+            <Settings className="w-3 h-3 md:w-4 md:h-4" />
+            <span className="hidden xs:block">Configuración</span>
+            <span className="xs:hidden">Ajustes</span>
           </motion.button>
         </motion.div>
       </nav>
@@ -92,15 +93,15 @@ export default function App() {
       {/* Landing Page Content */}
       <div className="relative z-10 w-full">
         {/* Section 1: Hero */}
-        <section className="min-h-screen flex flex-col pt-80 lg:pt-96 pb-32 px-8 lg:px-24 max-w-7xl mx-auto">
+        <section className="min-h-[80vh] flex flex-col pt-32 md:pt-80 lg:pt-96 pb-20 md:pb-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-xs tracking-[0.6em] uppercase font-bold text-brand mb-8 flex items-center gap-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+            className="text-[10px] md:text-xs tracking-[0.5em] md:tracking-[0.6em] uppercase font-bold text-brand mb-4 md:mb-8 flex items-center gap-3 md:gap-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
           >
-            <div className="w-20 h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
+            <div className="w-10 md:w-20 h-[1.5px] md:h-[2px] bg-brand shadow-[0_0_20px_rgba(255,78,0,1)]" />
             La Musa Escénica
           </motion.div>
 
@@ -109,7 +110,7 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-6xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-[-4px] leading-[0.8] mb-16 drop-shadow-2xl"
+            className="text-4xl xs:text-5xl md:text-[100px] lg:text-[130px] font-serif font-light tracking-[-1px] md:tracking-[-4px] leading-[1.1] md:leading-[0.8] mb-10 md:mb-16 drop-shadow-2xl"
           >
             Invocando <br />
             <span className="italic text-glow">Emociones</span>
@@ -120,7 +121,7 @@ export default function App() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="text-xl text-white max-w-[520px] leading-relaxed mb-12 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
+            className="text-lg md:text-xl text-white max-w-[520px] leading-relaxed mb-10 md:mb-12 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
           >
             Barbara Higuera no escribe canciones, <span className="text-white font-bold underline decoration-brand underline-offset-8">las convierte en escenas.</span> 
             Letras con identidad, alma y estética diseñadas para ser recordadas.
@@ -135,10 +136,10 @@ export default function App() {
             <motion.button 
               whileHover={{ scale: 1.08, x: 8 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-4 text-xs tracking-[0.2em] uppercase font-bold group drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]"
+              className="flex items-center gap-4 text-[10px] md:text-xs tracking-[0.2em] uppercase font-bold group drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]"
             >
-              <span className="w-14 h-14 rounded-full border border-white/60 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/20 bg-black/40 backdrop-blur-sm group-hover:shadow-[0_0_25px_rgba(255,78,0,0.5)]">
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1.5" />
+              <span className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/60 flex items-center justify-center transition-all group-hover:border-brand group-hover:bg-brand/20 bg-black/40 backdrop-blur-sm group-hover:shadow-[0_0_25px_rgba(255,78,0,0.5)]">
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1.5" />
               </span>
               <span className="group-hover:text-brand group-hover:drop-shadow-[0_0_10px_rgba(255,78,0,0.5)] transition-all">Descubrir el Universo</span>
             </motion.button>
@@ -146,19 +147,19 @@ export default function App() {
         </section>
 
         {/* Section 1.5: Quote */}
-        <section className="py-24 px-8 lg:px-24 text-center max-w-4xl mx-auto">
+        <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 text-center max-w-4xl mx-auto">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-serif italic text-white leading-tight drop-shadow-xl"
+            className="text-2xl md:text-3xl lg:text-5xl font-serif italic text-white leading-tight drop-shadow-xl"
           >
             "Las canciones no se escriben, <span className="text-glow text-brand">se sienten</span>."
           </motion.p>
         </section>
 
         {/* Section 2: Features Grid */}
-        <section className="py-32 px-8 lg:px-24 max-w-7xl mx-auto">
+        <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/20 rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl">
             {[
               {
@@ -183,28 +184,28 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-12 bg-black/60 hover:bg-white/[0.05] transition-colors group"
+                className="p-8 md:p-12 bg-black/60 hover:bg-white/[0.05] transition-colors group"
               >
-                <div className="font-mono text-brand text-sm mb-8 opacity-90 group-hover:opacity-100 transition-opacity tracking-widest font-bold">{feature.icon}</div>
-                <h3 className="text-2xl font-serif italic mb-4 tracking-tight drop-shadow-md text-white"> {feature.title} </h3>
-                <p className="text-sm text-white leading-relaxed drop-shadow-md"> {feature.desc} </p>
+                <div className="font-mono text-brand text-xs md:text-sm mb-6 md:mb-8 opacity-90 group-hover:opacity-100 transition-opacity tracking-widest font-bold">{feature.icon}</div>
+                <h3 className="text-xl md:text-2xl font-serif italic mb-3 md:mb-4 tracking-tight drop-shadow-md text-white"> {feature.title} </h3>
+                <p className="text-sm md:text-base text-white leading-relaxed drop-shadow-md"> {feature.desc} </p>
               </motion.div>
             ))}
           </div>
         </section>
 
         {/* Section 3: Technical Specs */}
-        <section className="py-32 px-8 lg:px-24 bg-gradient-to-b from-transparent to-black/80">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+        <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-transparent to-black/80">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-12 items-end">
             <div>
-              <h2 className="text-4xl lg:text-6xl font-serif font-light mb-8 italic tracking-tight drop-shadow-2xl">Esencia <br />Sensorial.</h2>
-              <p className="text-white max-w-md leading-relaxed drop-shadow-md font-medium">
+              <h2 className="text-3xl md:text-4xl lg:text-6xl font-serif font-light mb-6 md:mb-8 italic tracking-tight drop-shadow-2xl">Esencia <br className="hidden md:block" />Sensorial.</h2>
+              <p className="text-white max-w-md text-base md:text-lg leading-relaxed drop-shadow-md font-medium">
                 Cada canción es un personaje. No trabajo música, trabajo emociones que se traducen en experiencias memorables.
               </p>
             </div>
             
             
-            <div className="flex flex-col gap-12 border-l border-white/10 pl-12">
+            <div className="flex flex-col gap-8 md:gap-12 border-t md:border-t-0 md:border-l border-white/10 pt-10 md:pt-0 md:pl-12">
               {[
                 { label: 'Arquetipo', value: 'Hechicera Emocional', sub: 'Identidad Artística' },
                 { label: 'Visión', value: 'Musa Escénica', sub: 'Propuesta Estética' },
@@ -219,7 +220,7 @@ export default function App() {
                   className="flex flex-col gap-1"
                 >
                   <div className="text-[10px] tracking-[0.2em] uppercase text-white/60 mb-1 font-bold">{stat.label}</div>
-                  <div className="font-mono text-2xl tracking-tighter text-brand drop-shadow-lg">{stat.value}</div>
+                  <div className="font-mono text-xl md:text-2xl tracking-tighter text-brand drop-shadow-lg">{stat.value}</div>
                   <div className="text-[9px] text-white/50 uppercase tracking-[0.3em] mt-1 drop-shadow-sm">{stat.sub}</div>
                 </motion.div>
               ))}
@@ -228,17 +229,17 @@ export default function App() {
         </section>
 
         {/* Section 4: CTA */}
-        <section className="py-48 px-8 lg:px-24 text-center">
+        <section className="py-24 md:py-48 px-6 md:px-12 lg:px-24 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto rounded-[40px] p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group"
+            className="max-w-3xl mx-auto rounded-[32px] md:rounded-[40px] p-10 md:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group"
           >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
             
-            <h2 className="text-4xl lg:text-7xl font-serif italic mb-8 relative z-10">¿Damos vida a <br />tu próxima escena?</h2>
-            <p className="text-white/40 mb-12 max-w-md mx-auto relative z-10">
+            <h2 className="text-3xl md:text-4xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10">¿Damos vida a <br className="md:hidden" />tu próxima escena?</h2>
+            <p className="text-white/60 md:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base">
               Si buscas una canción que se sienta y perdure, hablemos. 
               Transformo ideas en experiencias sonoras únicas.
             </p>
@@ -251,7 +252,7 @@ export default function App() {
                 letterSpacing: "0.2em"
               }}
               whileTap={{ scale: 0.92 }}
-              className="px-16 py-7 bg-brand text-white font-bold rounded-full transition-all shadow-2xl shadow-brand/50 relative z-10 text-sm tracking-widest uppercase border border-white/20"
+              className="px-10 py-5 md:px-16 md:py-7 bg-brand text-white font-bold rounded-full transition-all shadow-2xl shadow-brand/50 relative z-10 text-[10px] md:text-sm tracking-widest uppercase border border-white/20"
             >
               Escribir a Barbara
             </motion.button>
@@ -364,15 +365,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Footer Mobile View */}
-      <footer className="fixed bottom-8 left-12 right-12 z-10 flex lg:hidden justify-between items-center text-white/20 text-[10px] tracking-widest uppercase">
-        <div>© 2026 Aurora Engine</div>
-        <div className="flex gap-4">
-          <span>{particleCount} PX</span>
-          <span>60 FPS</span>
-        </div>
-      </footer>
     </div>
   );
 }
