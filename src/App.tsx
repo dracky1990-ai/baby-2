@@ -6,7 +6,7 @@ import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight,
 
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
-  bgVideo: "https://ik.imagekit.io/x8axvbbz3/0508.mp4", // High quality background video
+  bgVideo: "https://ik.imagekit.io/x8axvbbz3/palomas%20blancas.mp4", // New high quality background video
   label: "La Musa Escénica",
   nav1: "Esencia",
   nav2: "Universo",
@@ -41,10 +41,28 @@ const PRESETS = [
 ];
 
 export default function App() {
-  const [content, setContent] = useState(INITIAL_CONTENT);
-  const [bgImage, setBgImage] = useState(PRESETS[0].url);
-  const [bgVideo, setBgVideo] = useState(INITIAL_CONTENT.bgVideo);
-  const [particleCount, setParticleCount] = useState(20);
+  const [content, setContent] = useState(() => {
+    const saved = localStorage.getItem('la_musa_content');
+    return saved ? JSON.parse(saved) : INITIAL_CONTENT;
+  });
+  const [bgImage, setBgImage] = useState(() => {
+    return localStorage.getItem('la_musa_bgImage') || PRESETS[0].url;
+  });
+  const [bgVideo, setBgVideo] = useState(() => {
+    return localStorage.getItem('la_musa_bgVideo') || INITIAL_CONTENT.bgVideo;
+  });
+  const [particleCount, setParticleCount] = useState(() => {
+    return Number(localStorage.getItem('la_musa_particleCount')) || 20;
+  });
+
+  // Persistence Effects
+  React.useEffect(() => {
+    localStorage.setItem('la_musa_content', JSON.stringify(content));
+    localStorage.setItem('la_musa_bgImage', bgImage);
+    localStorage.setItem('la_musa_bgVideo', bgVideo);
+    localStorage.setItem('la_musa_particleCount', particleCount.toString());
+  }, [content, bgImage, bgVideo, particleCount]);
+
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -901,17 +919,40 @@ export default function App() {
               </section>
             </div>
 
-            <div className="p-8 bg-black/60 border-t border-white/10">
+            <div className="p-8 bg-black/60 border-t border-white/10 space-y-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  const config = {
+                    content,
+                    bgImage,
+                    bgVideo,
+                    particleCount
+                  };
+                  const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'config_la_musa.json';
+                  a.click();
+                  alert("Configuración exportada. Por favor, compártela conmigo si quieres que estos cambios sean permanentes en el código fuente.");
+                }}
+                className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-[10px] uppercase tracking-widest font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+              >
+                <Save className="w-3 h-3" />
+                Exportar para el Desarrollador
+              </motion.button>
+              
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowSettings(false)}
                 className="w-full bg-brand p-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,78,0,0.3)]"
               >
-                <Save className="w-4 h-4" />
                 Aplicar Cambios
               </motion.button>
-              <p className="text-[8px] text-center mt-4 text-white/20 uppercase tracking-[0.3em]">Changes persist for this session</p>
+              <p className="text-[8px] text-center mt-4 text-white/20 uppercase tracking-[0.3em]">Cambios persistentes en este navegador</p>
             </div>
           </motion.div>
         )}
