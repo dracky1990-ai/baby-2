@@ -6,7 +6,7 @@ import MusicPage from './components/MusicPage';
 import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight, Github, Twitter, Lock, Save, Layout, Type, Film, Music, Disc, List, Plus, Trash2 } from 'lucide-react';
 
 const INITIAL_CONTENT = {
-  logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
+  logo: "https://ik.imagekit.io/ltrqfbdkh/WhatsApp_Image_2026-05-11_at_10.54.52_AM__1_-removebg-preview.png",
   bgVideo: "https://ik.imagekit.io/ltrqfbdkh/08%20(1).mp4", // Newest high quality background video
   label: "La Musa Escénica",
   nav1: "Esencia",
@@ -122,6 +122,11 @@ export default function App() {
     
     if (legacyVideos.includes(bgVideo)) {
       setBgVideo(INITIAL_CONTENT.bgVideo);
+    }
+
+    // Logo Migration
+    if (content.logo === "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242") {
+      setContent(prev => ({ ...prev, logo: INITIAL_CONTENT.logo }));
     }
     
     try {
