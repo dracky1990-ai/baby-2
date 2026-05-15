@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import BackgroundCanvas from './components/BackgroundCanvas';
 import BackgroundVideo from './components/BackgroundVideo';
-import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight, Github, Twitter, Lock, Save, Layout, Type, Film } from 'lucide-react';
+import MusicPage from './components/MusicPage';
+import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight, Github, Twitter, Lock, Save, Layout, Type, Film, Music, Disc, List, Plus, Trash2 } from 'lucide-react';
 
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
@@ -13,8 +14,52 @@ const INITIAL_CONTENT = {
   heroTitle: "Invocando \nEmociones",
   heroDesc: "Barbara Higuera no escribe canciones, las convierte en escenas. Letras con identidad, alma y estética diseñadas para ser recordadas.",
   heroBtn: "Descubrir el Universo",
+  quote: "Las canciones no se escriben, se sienten.",
+  features: [
+    { title: 'Identidad Única', desc: 'Ayudo a artistas a encontrar una esencia estética y emocional a través de su música.', icon: '01' },
+    { title: 'Narrativa Visual', desc: 'Canciones con alma, concepto y una estética entre lo real y lo mágico.', icon: '02' },
+    { title: 'Impacto Escénico', desc: 'Letras que no solo se escuchan, sino que se sienten y se quedan en la gente.', icon: '03' }
+  ],
+  statsTitle: "Esencia \nSensorial.",
+  statsDesc: "Cada canción es un personaje. No trabajo música, trabajo emociones que se traducen en experiencias memorables.",
+  stats: [
+    { label: 'Arquetipo', value: 'Hechicera Emocional', sub: 'Identidad Artística' },
+    { label: 'Visión', value: 'Musa Escénica', sub: 'Propuesta Estética' },
+    { label: 'Filtro', value: 'Realismo Mágico', sub: 'Universo Visual' }
+  ],
+  ctaTitle: "¿Damos vida a \ntu próxima escena?",
+  ctaDesc: "Si buscas una canción que se sienta y perdure, hablemos. Transformo ideas en experiencias sonoras únicas.",
+  ctaBtn: "Escribir a Barbara",
   footerLabel: "La Musa Escénica",
-  footerCopy: "© 2026 Barbara Higuera • Todos los derechos reservados"
+  footerCopy: "© 2026 Barbara Higuera • Todos los derechos reservados",
+  music: {
+    title: "Universo Musical",
+    desc: "Cada álbum es un fragmento de alma. Explora las atmósferas y líricas que definen mi búsqueda artística en este espacio inmersivo.",
+    bgVideo: "", // Custom background video for music page (optional)
+    albums: [
+      {
+        id: "1",
+        title: "Invocación Primaria",
+        cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=800",
+        year: "2024",
+        songs: [
+          { name: "Sombra y Luz", duration: "3:45", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+          { name: "La Musa Escénica", duration: "4:20", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+          { name: "Pueblo Blanco", duration: "3:15", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+        ]
+      },
+      {
+        id: "2",
+        title: "Escenas del Alma",
+        cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&q=80&w=800",
+        year: "2023",
+        songs: [
+          { name: "Preludio Lunar", duration: "2:50", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+          { name: "Eco y Silencio", duration: "5:05", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" }
+        ]
+      }
+    ]
+  }
 };
 
 const PRESETS = [
@@ -28,12 +73,22 @@ export default function App() {
   const [content, setContent] = useState(() => {
     try {
       const saved = localStorage.getItem('la_musa_content');
-      return saved ? JSON.parse(saved) : INITIAL_CONTENT;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Deep merge for music object if it exists
+        return { 
+          ...INITIAL_CONTENT, 
+          ...parsed,
+          music: { ...INITIAL_CONTENT.music, ...(parsed.music || {}) }
+        };
+      }
+      return INITIAL_CONTENT;
     } catch (e) {
       console.warn("Failed to load content from localStorage", e);
       return INITIAL_CONTENT;
     }
   });
+  const [currentPage, setCurrentPage] = useState<'home' | 'music'>('home');
   const [bgImage, setBgImage] = useState(() => {
     try {
       return localStorage.getItem('la_musa_bgImage') || PRESETS[0].url;
@@ -186,8 +241,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen text-white font-sans selection:bg-brand/30 overflow-x-hidden">
-      <BackgroundVideo src={bgVideo} />
-      <BackgroundCanvas bgImage={bgVideo ? "" : bgImage} particleCount={particleCount} />
+      <BackgroundVideo src={(currentPage === 'music' && content.music.bgVideo) ? content.music.bgVideo : bgVideo} />
+      <BackgroundCanvas bgImage={((currentPage === 'music' && content.music.bgVideo) || bgVideo) ? "" : bgImage} particleCount={particleCount} />
       
       {/* Navigation */}
       <nav className="fixed md:absolute top-0 w-full p-2 sm:p-6 md:p-8 lg:p-16 flex justify-between items-center z-[60] pointer-events-none bg-black/20 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border-b border-white/5 md:border-0">
@@ -217,37 +272,45 @@ export default function App() {
           transition={{ delay: 0.1 }}
           className="flex items-center gap-4 md:gap-8 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white/90 pointer-events-auto"
         >
-          <motion.a 
-            href="#" 
+          <motion.button 
+            onClick={() => setCurrentPage('home')}
             whileHover={{ 
               scale: 1.15, 
               textShadow: "0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,78,0,0.5)", 
               color: "#fff" 
             }}
             whileTap={{ scale: 0.9 }}
-            className="text-white font-medium hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
+            className={`font-medium transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2 ${currentPage === 'home' ? 'text-brand border-b border-brand' : 'text-white'}`}
           >
             {content.nav1}
-          </motion.a>
-          <motion.a 
-            href="#" 
+          </motion.button>
+          <motion.button 
+            onClick={() => setCurrentPage('music')}
             whileHover={{ 
               scale: 1.15, 
               textShadow: "0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,78,0,0.5)", 
               color: "#fff" 
             }}
             whileTap={{ scale: 0.9 }}
-            className="text-white font-medium hover:text-white transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2"
+            className={`font-medium transition-all cursor-pointer drop-shadow-[0_4px_12px_rgba(0,0,0,1)] px-2 ${currentPage === 'music' ? 'text-brand border-b border-brand' : 'text-white'}`}
           >
             {content.nav2}
-          </motion.a>
+          </motion.button>
         </motion.div>
       </nav>
 
       {/* Landing Page Content */}
-      <div className="relative z-10 w-full overflow-hidden">
-        {/* Section 1: Hero */}
-        <section className="min-h-screen flex flex-col justify-center pt-24 sm:pt-20 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+      <AnimatePresence mode="wait">
+        {currentPage === 'home' ? (
+          <motion.div 
+            key="home"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="relative z-10 w-full overflow-hidden"
+          >
+            {/* Section 1: Hero */}
+            <section className="min-h-screen flex flex-col justify-center pt-24 sm:pt-20 md:pt-[450px] lg:pt-[580px] pb-12 sm:pb-20 md:pb-32 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -347,6 +410,7 @@ export default function App() {
             }}
           >
             <motion.button 
+              onClick={() => setCurrentPage('music')}
               variants={{
                 hidden: { opacity: 0, x: -20 },
                 visible: { opacity: 1, x: 0, transition: { duration: 0.8 } }
@@ -377,45 +441,215 @@ export default function App() {
           </motion.div>
         </section>
 
-        {/* Section 5: Final Footer */}
-        <footer className="py-12 md:py-24 px-6 md:px-8 lg:px-24">
+        {/* Section 1.5: Quote */}
+        <section className="py-12 md:py-24 px-6 md:px-12 lg:px-24 text-center max-w-4xl mx-auto">
+          <motion.p
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.5 }}
+            variants={textBlurVariants}
+            className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-serif italic text-white leading-snug drop-shadow-xl"
+          >
+            "{content.quote.includes(',') 
+              ? <>{content.quote.split(',')[0]}, <span className="text-glow text-brand">{content.quote.split(',')[1]}</span></>
+              : content.quote}."
+          </motion.p>
+        </section>
+
+        {/* Section 2: Features Grid */}
+        <section className="py-12 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, amount: 0.1 }}
             variants={containerVariants}
-            className="max-w-7xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-px bg-white/5 md:bg-white/10 border border-white/10 md:border-white/20 rounded-[2rem] md:rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl p-px"
           >
-            <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/10 pt-16 md:pt-24 pb-8 md:pb-12">
-              <motion.div variants={itemVariants} className="flex items-center gap-8 opacity-80">
-                <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
-                  <Twitter className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
-                  <Github className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
-                </motion.div>
-                <span className="text-[11px] tracking-[0.3em] uppercase font-bold text-white/50 border-l border-white/20 pl-8">Barbara Higuera Lab</span>
+            {content.features.map((feature, i) => (
+              <motion.div 
+                key={i}
+                variants={itemVariants}
+                className="p-8 md:p-12 bg-black/40 md:bg-black/60 hover:bg-white/[0.05] transition-colors group rounded-[1.8rem] md:rounded-none"
+              >
+                <div className="font-mono text-brand text-xs md:text-sm mb-4 md:mb-8 opacity-90 group-hover:opacity-100 transition-opacity tracking-widest font-bold">{feature.icon}</div>
+                <h3 className="text-xl md:text-2xl font-serif italic mb-2 md:mb-4 tracking-tight drop-shadow-md text-white"> {feature.title} </h3>
+                <p className="text-sm md:text-base text-white/80 leading-relaxed drop-shadow-md"> {feature.desc} </p>
               </motion.div>
-              
-              <motion.div variants={itemVariants} className="text-center md:text-right flex flex-col items-center md:items-end group">
-                <div className="text-[10px] tracking-[0.4em] uppercase text-white/80 mb-2 font-bold italic drop-shadow-md">{content.footerLabel}</div>
-                <div className="flex items-center gap-2">
-                  <div className="text-[10px] tracking-widest uppercase text-white/70 font-bold drop-shadow-sm">{content.footerCopy}</div>
-                  <motion.button
-                    whileHover={{ opacity: 1, scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setShowPasswordModal(true)}
-                    className="opacity-[0.08] hover:opacity-100 transition-all pointer-events-auto p-1"
-                    title=""
-                  >
-                    <Lock className="w-2.5 h-2.5" />
-                  </motion.button>
-                </div>
-              </motion.div>
-            </div>
+            ))}
           </motion.div>
-        </footer>
-      </div>
+        </section>
+
+        {/* Section 3: Technical Specs */}
+        <section className="py-12 md:py-32 px-6 sm:px-12 lg:px-24 bg-gradient-to-b from-transparent via-black/40 to-black/80">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-center">
+            <div className="text-left">
+              <motion.h2 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.5 }}
+                variants={textBlurVariants}
+                className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light mb-4 md:mb-8 italic tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,1)] whitespace-pre-line leading-[1.1]"
+              >
+                {content.statsTitle}
+              </motion.h2>
+              <motion.p 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                variants={{
+                  visible: { transition: { staggerChildren: 0.02 } }
+                }}
+                className="text-white/90 max-w-md text-base sm:text-lg leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] font-medium"
+              >
+                {content.statsDesc.split(' ').map((word, i) => (
+                  <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
+                    <motion.span
+                      variants={{
+                        hidden: { y: "100%", opacity: 0 },
+                        visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+                      }}
+                      className="inline-block"
+                    >
+                      {word}
+                    </motion.span>
+                  </span>
+                ))}
+              </motion.p>
+            </div>
+            
+            <div className="flex flex-col gap-6 sm:gap-10 border-t md:border-t-0 md:border-l border-white/10 pt-10 md:pt-4 md:pl-12">
+              {content.stats.map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: false, amount: 0.2 }}
+                  variants={itemVariants}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex flex-col gap-1 border-b border-white/5 pb-6 md:border-0 md:pb-0 group"
+                >
+                  <div className="text-[10px] tracking-[0.2em] uppercase text-white/40 mb-1 font-bold drop-shadow-sm transition-colors group-hover:text-brand/60">{stat.label}</div>
+                  <motion.div 
+                    variants={{
+                      hidden: { y: 20, opacity: 0 },
+                      visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
+                    }}
+                    className="font-mono text-xl sm:text-2xl md:text-3xl tracking-tighter text-brand drop-shadow-[0_0_15px_rgba(255,78,0,0.4)]"
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <div className="text-[10px] sm:text-[11px] text-white/30 uppercase tracking-[0.2em] mt-1 italic">{stat.sub}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 4: CTA */}
+        <section className="py-16 md:py-48 px-6 md:px-12 lg:px-24 text-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.3 }}
+            variants={itemVariants}
+            className="max-w-3xl mx-auto rounded-[2rem] md:rounded-[40px] p-10 sm:p-16 lg:p-24 border border-white/10 bg-white/[0.02] backdrop-blur-3xl relative overflow-hidden group shadow-2xl"
+          >
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+            
+            <motion.h2 
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { transition: { staggerChildren: 0.02 } }
+              }}
+              className="text-4xl sm:text-5xl lg:text-7xl font-serif italic mb-6 md:mb-8 relative z-10 whitespace-pre-line leading-[1.1] overflow-hidden"
+            >
+              {content.ctaTitle.split('\n').map((line, i) => (
+                <div key={i} className="flex flex-wrap justify-center">
+                  {line.split(' ').map((word, wordIdx) => (
+                    <div key={wordIdx} className="flex overflow-hidden mr-[0.3em] py-1">
+                      {word.split('').map((char, charIdx) => (
+                        <motion.span
+                          key={charIdx}
+                          variants={{
+                            hidden: { y: "120%", opacity: 0 },
+                            visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "circOut" } }
+                          }}
+                        >
+                          {char}
+                        </motion.span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </motion.h2>
+            <p className="text-white/80 sm:text-white/40 mb-10 md:mb-12 max-w-md mx-auto relative z-10 text-sm md:text-base leading-relaxed px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+              {content.ctaDesc}
+            </p>
+            
+            <motion.button 
+              whileHover={{ 
+                scale: 1.15, 
+                boxShadow: "0 0 80px rgba(255,78,0,0.9), 0 0 30px rgba(255,255,255,0.3) inset",
+                backgroundColor: "rgba(255, 78, 0, 1)",
+                letterSpacing: "0.3em",
+                filter: "brightness(1.1)"
+              }}
+              whileTap={{ scale: 0.92 }}
+              className="px-8 py-5 sm:px-20 sm:py-8 bg-brand text-white font-bold rounded-full transition-all shadow-2xl shadow-brand/60 relative z-10 text-[10px] md:text-sm tracking-widest uppercase border-2 border-white/30"
+            >
+              {content.ctaBtn}
+            </motion.button>
+          </motion.div>
+        </section>
+      </motion.div>
+    ) : (
+      <MusicPage 
+        key="music"
+        onBack={() => setCurrentPage('home')} 
+        musicContent={content.music} 
+      />
+    )}
+  </AnimatePresence>
+
+  {/* Global Footer */}
+        <footer className="relative z-20 py-12 md:py-24 px-6 md:px-8 lg:px-24">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.1 }}
+          variants={containerVariants}
+          className="max-w-7xl mx-auto"
+        >
+          <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/10 pt-16 md:pt-24 pb-8 md:pb-12">
+            <motion.div variants={itemVariants} className="flex items-center gap-8 opacity-80">
+              <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
+                <Twitter className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.2, color: "#fff", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.8))" }}>
+                <Github className="w-5 h-5 cursor-pointer hover:text-white transition-all" />
+              </motion.div>
+              <span className="text-[11px] tracking-[0.3em] uppercase font-bold text-white/50 border-l border-white/20 pl-8">Barbara Higuera Lab</span>
+            </motion.div>
+            
+            <motion.div variants={itemVariants} className="text-center md:text-right flex flex-col items-center md:items-end group">
+              <div className="text-[10px] tracking-[0.4em] uppercase text-white/80 mb-2 font-bold italic drop-shadow-md">{content.footerLabel}</div>
+              <div className="flex items-center gap-2">
+                <div className="text-[10px] tracking-widest uppercase text-white/70 font-bold drop-shadow-sm">{content.footerCopy}</div>
+                <motion.button
+                  whileHover={{ opacity: 1, scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setShowPasswordModal(true)}
+                  className="opacity-[0.08] hover:opacity-100 transition-all pointer-events-auto p-1"
+                  title=""
+                >
+                  <Lock className="w-2.5 h-2.5" />
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </footer>
 
       {/* Password Modal */}
       <AnimatePresence>
@@ -646,6 +880,292 @@ export default function App() {
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors"
                       />
                     </div>
+                    <div>
+                      <label className="text-[9px] uppercase tracking-widest text-white/30 mb-2 block">Frase Inspiradora (Separar con coma)</label>
+                      <input 
+                        value={content.quote} 
+                        onChange={(e) => setContent({...content, quote: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none transition-colors italic"
+                        placeholder="Las canciones no se escriben, se sienten"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Feature Grid Editors */}
+                  <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-6">
+                    <label className="text-[9px] uppercase tracking-widest text-white/30 block border-b border-white/5 pb-2">Cuadrícula de Esencia</label>
+                    {content.features.map((f, idx) => (
+                      <div key={idx} className="space-y-3 p-4 bg-black/20 rounded-xl border border-white/5">
+                        <div className="grid grid-cols-2 gap-2">
+                          <input 
+                            value={f.title} 
+                            onChange={(e) => {
+                              const newFeatures = [...content.features];
+                              newFeatures[idx].title = e.target.value;
+                              setContent({...content, features: newFeatures});
+                            }}
+                            className="w-full bg-transparent border-b border-white/10 p-1 text-sm font-bold text-brand outline-none focus:border-brand"
+                            placeholder="Title"
+                          />
+                          <input 
+                            value={f.icon} 
+                            onChange={(e) => {
+                              const newFeatures = [...content.features];
+                              newFeatures[idx].icon = e.target.value;
+                              setContent({...content, features: newFeatures});
+                            }}
+                            className="w-full bg-transparent border-b border-white/10 p-1 text-[10px] text-white/40 outline-none focus:border-brand text-right"
+                            placeholder="01"
+                          />
+                        </div>
+                        <textarea 
+                          value={f.desc} 
+                          onChange={(e) => {
+                            const newFeatures = [...content.features];
+                            newFeatures[idx].desc = e.target.value;
+                            setContent({...content, features: newFeatures});
+                          }}
+                          className="w-full bg-transparent p-1 text-[12px] text-white/60 outline-none h-16 resize-none"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Statistics Editor */}
+                  <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-6">
+                    <label className="text-[9px] uppercase tracking-widest text-white/30 block border-b border-white/5 pb-2">Especificaciones Técnicas</label>
+                    <textarea 
+                      value={content.statsTitle} 
+                      onChange={(e) => setContent({...content, statsTitle: e.target.value})}
+                      rows={2}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none mb-2"
+                    />
+                    <textarea 
+                      value={content.statsDesc} 
+                      onChange={(e) => setContent({...content, statsDesc: e.target.value})}
+                      rows={2}
+                      className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-[12px] text-white/60 focus:border-brand outline-none"
+                    />
+                    <div className="space-y-4">
+                      {content.stats.map((s, idx) => (
+                        <div key={idx} className="space-y-2 p-3 bg-black/20 rounded-xl border border-white/5">
+                          <div className="grid grid-cols-2 gap-2">
+                             <input 
+                              value={s.label} 
+                              onChange={(e) => {
+                                const newStats = [...content.stats];
+                                newStats[idx].label = e.target.value;
+                                setContent({...content, stats: newStats});
+                              }}
+                              className="bg-transparent border-b border-white/10 text-[10px] text-white/40 outline-none uppercase"
+                            />
+                            <input 
+                              value={s.value} 
+                              onChange={(e) => {
+                                const newStats = [...content.stats];
+                                newStats[idx].value = e.target.value;
+                                setContent({...content, stats: newStats});
+                              }}
+                              className="bg-transparent border-b border-white/10 text-brand text-sm outline-none text-right font-bold"
+                            />
+                          </div>
+                          <input 
+                            value={s.sub} 
+                            onChange={(e) => {
+                              const newStats = [...content.stats];
+                              newStats[idx].sub = e.target.value;
+                              setContent({...content, stats: newStats});
+                            }}
+                            className="w-full bg-transparent border-b border-white/10 text-[9px] text-white/30 outline-none uppercase tracking-widest"
+                            placeholder="Sub-label"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-4">
+                     <label className="text-[9px] uppercase tracking-widest text-white/30 block border-b border-white/5 pb-2">Llamado a la Acción</label>
+                     <input 
+                        value={content.ctaTitle} 
+                        onChange={(e) => setContent({...content, ctaTitle: e.target.value})}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none"
+                      />
+                      <textarea 
+                        value={content.ctaDesc} 
+                        onChange={(e) => setContent({...content, ctaDesc: e.target.value})}
+                        rows={2}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-[12px] text-white/60 focus:border-brand outline-none"
+                      />
+                      <input 
+                        value={content.ctaBtn} 
+                        onChange={(e) => setContent({...content, ctaBtn: e.target.value})}
+                        className="w-full bg-brand/10 border border-brand/20 rounded-lg p-3 text-sm font-bold text-brand outline-none"
+                      />
+                  </div>
+
+                  {/* Footers and Music Management */}
+                  <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-8">
+                     <div className="flex items-center gap-3 border-b border-white/5 pb-2">
+                        <Music className="w-4 h-4 text-brand/60" />
+                        <label className="text-[9px] uppercase tracking-widest text-white/30 block">Universo Musical</label>
+                     </div>
+                     
+                     <div className="space-y-4">
+                        <input 
+                          value={content.music.title} 
+                          onChange={(e) => setContent({...content, music: {...content.music, title: e.target.value}})}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none"
+                          placeholder="Título de la Sección"
+                        />
+                        <textarea 
+                          value={content.music.desc} 
+                          onChange={(e) => setContent({...content, music: {...content.music, desc: e.target.value}})}
+                          rows={2}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm focus:border-brand outline-none"
+                          placeholder="Descripción de la Sección"
+                        />
+                        <div className="space-y-2">
+                           <label className="text-[8px] uppercase tracking-widest text-white/30 block flex items-center gap-2">
+                             <Film className="w-3 h-3" /> Vídeo de Fondo (Opcional)
+                           </label>
+                           <input 
+                            value={content.music.bgVideo} 
+                            onChange={(e) => setContent({...content, music: {...content.music, bgVideo: e.target.value}})}
+                            className="w-full bg-black/20 border border-white/5 rounded-lg p-2 text-[10px] focus:border-brand outline-none italic"
+                            placeholder="Dejar vacío para usar vídeo global"
+                          />
+                        </div>
+                     </div>
+
+                     <div className="space-y-6">
+                        {content.music.albums.map((album: any, aIdx: number) => (
+                          <div key={album.id} className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-4">
+                            <div className="flex justify-between items-center">
+                              <span className="text-[10px] font-bold text-brand uppercase tracking-widest">Álbum #{aIdx + 1}</span>
+                              <button 
+                                onClick={() => {
+                                  const newAlbums = content.music.albums.filter((_: any, i: number) => i !== aIdx);
+                                  setContent({...content, music: {...content.music, albums: newAlbums}});
+                                }}
+                                className="text-red-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                            
+                            <div className="space-y-3">
+                              <input 
+                                value={album.title}
+                                onChange={(e) => {
+                                  const newAlbums = [...content.music.albums];
+                                  newAlbums[aIdx].title = e.target.value;
+                                  setContent({...content, music: {...content.music, albums: newAlbums}});
+                                }}
+                                className="w-full bg-transparent border-b border-white/5 p-1 text-sm outline-none focus:border-brand"
+                                placeholder="Título del Álbum"
+                              />
+                              <input 
+                                value={album.cover}
+                                onChange={(e) => {
+                                  const newAlbums = [...content.music.albums];
+                                  newAlbums[aIdx].cover = e.target.value;
+                                  setContent({...content, music: {...content.music, albums: newAlbums}});
+                                }}
+                                className="w-full bg-transparent border-b border-white/5 p-1 text-[10px] text-white/40 outline-none focus:border-brand"
+                                placeholder="URL de la Carátula"
+                              />
+                              <input 
+                                value={album.year}
+                                onChange={(e) => {
+                                  const newAlbums = [...content.music.albums];
+                                  newAlbums[aIdx].year = e.target.value;
+                                  setContent({...content, music: {...content.music, albums: newAlbums}});
+                                }}
+                                className="w-full bg-transparent border-b border-white/5 p-1 text-[10px] text-white/40 outline-none focus:border-brand"
+                                placeholder="Año"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="text-[8px] uppercase tracking-widest text-white/20 block">Lista de Canciones</label>
+                              {album.songs.map((song: any, sIdx: number) => (
+                                <div key={sIdx} className="space-y-2 bg-black/20 p-3 rounded-lg border border-white/5">
+                                  <div className="flex gap-2 items-center">
+                                    <input 
+                                      value={song.name}
+                                      onChange={(e) => {
+                                        const newAlbums = [...content.music.albums];
+                                        newAlbums[aIdx].songs[sIdx].name = e.target.value;
+                                        setContent({...content, music: {...content.music, albums: newAlbums}});
+                                      }}
+                                      className="flex-1 bg-transparent text-[10px] outline-none"
+                                      placeholder="Nombre"
+                                    />
+                                    <input 
+                                      value={song.duration}
+                                      onChange={(e) => {
+                                        const newAlbums = [...content.music.albums];
+                                        newAlbums[aIdx].songs[sIdx].duration = e.target.value;
+                                        setContent({...content, music: {...content.music, albums: newAlbums}});
+                                      }}
+                                      className="w-12 bg-transparent text-[10px] outline-none text-white/40"
+                                      placeholder="3:45"
+                                    />
+                                    <button 
+                                      onClick={() => {
+                                        const newAlbums = [...content.music.albums];
+                                        newAlbums[aIdx].songs = newAlbums[aIdx].songs.filter((_: any, i: number) => i !== sIdx);
+                                        setContent({...content, music: {...content.music, albums: newAlbums}});
+                                      }}
+                                      className="text-white/20 hover:text-red-400 transition-colors"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <input 
+                                    value={song.url}
+                                    onChange={(e) => {
+                                      const newAlbums = [...content.music.albums];
+                                      newAlbums[aIdx].songs[sIdx].url = e.target.value;
+                                      setContent({...content, music: {...content.music, albums: newAlbums}});
+                                    }}
+                                    className="w-full bg-transparent p-1 border-t border-white/5 text-[8px] text-white/30 outline-none focus:text-white transition-colors"
+                                    placeholder="URL del MP3 (Directo)"
+                                  />
+                                </div>
+                              ))}
+                              <button 
+                                onClick={() => {
+                                  const newAlbums = [...content.music.albums];
+                                  newAlbums[aIdx].songs.push({ name: "Nueva Canción", duration: "0:00", url: "" });
+                                  setContent({...content, music: {...content.music, albums: newAlbums}});
+                                }}
+                                className="w-full py-2 border border-dashed border-white/10 rounded-lg text-white/20 hover:text-white hover:border-white/20 transition-all text-[10px] uppercase flex items-center justify-center gap-2"
+                              >
+                                <Plus className="w-3 h-3" /> Añadir Canción
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                        <button 
+                          onClick={() => {
+                            const newAlbums = [...content.music.albums];
+                            newAlbums.push({
+                              id: Date.now().toString(),
+                              title: "Nuevo Álbum",
+                              cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=800",
+                              year: new Date().getFullYear().toString(),
+                              songs: []
+                            });
+                            setContent({...content, music: {...content.music, albums: newAlbums}});
+                          }}
+                          className="w-full py-4 bg-brand/5 border border-brand/20 rounded-xl text-brand hover:bg-brand hover:text-white transition-all text-xs font-bold uppercase flex items-center justify-center gap-2"
+                        >
+                          <Disc className="w-4 h-4" /> Crear Nuevo Álbum
+                        </button>
+                     </div>
                   </div>
 
                   {/* Footer */}
