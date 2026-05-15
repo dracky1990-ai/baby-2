@@ -6,7 +6,7 @@ import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight,
 
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
-  bgVideo: "https://ik.imagekit.io/x8axvbbz3/blancas%20palomas.mp4", // Latest high quality background video
+  bgVideo: "https://ik.imagekit.io/ltrqfbdkh/08%20(1).mp4", // Newest high quality background video
   label: "La Musa Escénica",
   nav1: "Esencia",
   nav2: "Universo",
@@ -77,7 +77,8 @@ export default function App() {
     // Migration: Ensure user gets the absolute latest video URL if they have a legacy one
     const legacyVideos = [
       "https://ik.imagekit.io/x8axvbbz3/0508.mp4",
-      "https://ik.imagekit.io/x8axvbbz3/palomas%20blancas.mp4"
+      "https://ik.imagekit.io/x8axvbbz3/palomas%20blancas.mp4",
+      "https://ik.imagekit.io/x8axvbbz3/blancas%20palomas.mp4"
     ];
     
     if (legacyVideos.includes(bgVideo)) {
