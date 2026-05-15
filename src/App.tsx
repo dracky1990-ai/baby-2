@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import BackgroundCanvas from './components/BackgroundCanvas';
 import BackgroundVideo from './components/BackgroundVideo';
@@ -6,7 +6,7 @@ import { Sparkles, Sliders, Image as ImageIcon, Upload, X, Settings, ArrowRight,
 
 const INITIAL_CONTENT = {
   logo: "https://ik.imagekit.io/x8axvbbz3/Gemini_Generated_Image_jc7opdjc7opdjc7o-removebg-preview.png?updatedAt=1778201669242",
-  bgVideo: "https://ik.imagekit.io/x8axvbbz3/palomas%20blancas.mp4", // New high quality background video
+  bgVideo: "https://ik.imagekit.io/x8axvbbz3/blancas%20palomas.mp4", // Latest high quality background video
   label: "La Musa Escénica",
   nav1: "Esencia",
   nav2: "Universo",
@@ -42,30 +42,56 @@ const PRESETS = [
 
 export default function App() {
   const [content, setContent] = useState(() => {
-    const saved = localStorage.getItem('la_musa_content');
-    return saved ? JSON.parse(saved) : INITIAL_CONTENT;
+    try {
+      const saved = localStorage.getItem('la_musa_content');
+      return saved ? JSON.parse(saved) : INITIAL_CONTENT;
+    } catch (e) {
+      console.warn("Failed to load content from localStorage", e);
+      return INITIAL_CONTENT;
+    }
   });
   const [bgImage, setBgImage] = useState(() => {
-    return localStorage.getItem('la_musa_bgImage') || PRESETS[0].url;
+    try {
+      return localStorage.getItem('la_musa_bgImage') || PRESETS[0].url;
+    } catch (e) {
+      return PRESETS[0].url;
+    }
   });
   const [bgVideo, setBgVideo] = useState(() => {
-    return localStorage.getItem('la_musa_bgVideo') || INITIAL_CONTENT.bgVideo;
+    try {
+      return localStorage.getItem('la_musa_bgVideo') || INITIAL_CONTENT.bgVideo;
+    } catch (e) {
+      return INITIAL_CONTENT.bgVideo;
+    }
   });
   const [particleCount, setParticleCount] = useState(() => {
-    return Number(localStorage.getItem('la_musa_particleCount')) || 20;
+    try {
+      return Number(localStorage.getItem('la_musa_particleCount')) || 20;
+    } catch (e) {
+      return 20;
+    }
   });
 
   // Persistence Effects
-  React.useEffect(() => {
-    // Migration: If user still has the old video in localStorage, update it to the new one
-    if (bgVideo === "https://ik.imagekit.io/x8axvbbz3/0508.mp4") {
+  useEffect(() => {
+    // Migration: Ensure user gets the absolute latest video URL if they have a legacy one
+    const legacyVideos = [
+      "https://ik.imagekit.io/x8axvbbz3/0508.mp4",
+      "https://ik.imagekit.io/x8axvbbz3/palomas%20blancas.mp4"
+    ];
+    
+    if (legacyVideos.includes(bgVideo)) {
       setBgVideo(INITIAL_CONTENT.bgVideo);
     }
     
-    localStorage.setItem('la_musa_content', JSON.stringify(content));
-    localStorage.setItem('la_musa_bgImage', bgImage);
-    localStorage.setItem('la_musa_bgVideo', bgVideo);
-    localStorage.setItem('la_musa_particleCount', particleCount.toString());
+    try {
+      localStorage.setItem('la_musa_content', JSON.stringify(content));
+      localStorage.setItem('la_musa_bgImage', bgImage);
+      localStorage.setItem('la_musa_bgVideo', bgVideo);
+      localStorage.setItem('la_musa_particleCount', particleCount.toString());
+    } catch (e) {
+      console.warn("Failed to save to localStorage", e);
+    }
   }, [content, bgImage, bgVideo, particleCount]);
 
   const resetToDefaults = () => {
@@ -74,7 +100,10 @@ export default function App() {
       setBgImage(PRESETS[0].url);
       setBgVideo(INITIAL_CONTENT.bgVideo);
       setParticleCount(20);
-      localStorage.clear();
+      localStorage.removeItem('la_musa_content');
+      localStorage.removeItem('la_musa_bgImage');
+      localStorage.removeItem('la_musa_bgVideo');
+      localStorage.removeItem('la_musa_particleCount');
       alert("Valores restablecidos. Por favor refrezca la página si no ves los cambios.");
     }
   };
@@ -372,7 +401,9 @@ export default function App() {
             variants={textBlurVariants}
             className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-serif italic text-white leading-snug drop-shadow-xl"
           >
-            "{content.quote.split(',')[0]}, <span className="text-glow text-brand">{content.quote.split(',')[1]}</span>."
+            "{content.quote.includes(',') 
+              ? <>{content.quote.split(',')[0]}, <span className="text-glow text-brand">{content.quote.split(',')[1]}</span></>
+              : content.quote}."
           </motion.p>
         </section>
 

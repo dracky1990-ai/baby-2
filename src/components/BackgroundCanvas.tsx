@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import gsap, { Power0 } from 'gsap';
+import gsap from 'gsap';
 
 interface BackgroundCanvasProps {
   bgImage?: string;
@@ -87,7 +87,7 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
           y: '+=' + String(rand(-50, 50)),
           scale: () => (p.index % 2 === 0 ? rand(2.5, 5) : 0.8),
           progress: 1,
-          ease: Power0.easeNone,
+          ease: "none",
           onComplete: () => setParticle(p, true),
         }, 0)
         .fromTo(p, {
