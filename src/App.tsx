@@ -57,11 +57,27 @@ export default function App() {
 
   // Persistence Effects
   React.useEffect(() => {
+    // Migration: If user still has the old video in localStorage, update it to the new one
+    if (bgVideo === "https://ik.imagekit.io/x8axvbbz3/0508.mp4") {
+      setBgVideo(INITIAL_CONTENT.bgVideo);
+    }
+    
     localStorage.setItem('la_musa_content', JSON.stringify(content));
     localStorage.setItem('la_musa_bgImage', bgImage);
     localStorage.setItem('la_musa_bgVideo', bgVideo);
     localStorage.setItem('la_musa_particleCount', particleCount.toString());
   }, [content, bgImage, bgVideo, particleCount]);
+
+  const resetToDefaults = () => {
+    if (window.confirm("¿Estás seguro de que quieres restablecer todos los valores por defecto? Se perderán tus cambios personalizados.")) {
+      setContent(INITIAL_CONTENT);
+      setBgImage(PRESETS[0].url);
+      setBgVideo(INITIAL_CONTENT.bgVideo);
+      setParticleCount(20);
+      localStorage.clear();
+      alert("Valores restablecidos. Por favor refrezca la página si no ves los cambios.");
+    }
+  };
 
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -942,6 +958,16 @@ export default function App() {
               >
                 <Save className="w-3 h-3" />
                 Exportar para el Desarrollador
+              </motion.button>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={resetToDefaults}
+                className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-[10px] uppercase tracking-widest font-bold hover:bg-red-500/20 hover:text-red-400 transition-all flex items-center justify-center gap-2"
+              >
+                <X className="w-3 h-3" />
+                Restablecer a Valores de Fábrica
               </motion.button>
               
               <motion.button
